@@ -4,6 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jackton — Attention Untuk Brand Properti</title>
+  <meta name="description" content="Jackton mendistribusikan brand properti Anda ke ribuan titik setiap hari — compounding, tanpa henti."/>
+  <meta property="og:title" content="Jackton — Sebar. Dominasi. Compounding."/>
+  <meta property="og:description" content="Digital Marketing Agency spesialis properti. Distribution memicu Virality, Attention pasar selalu tertuju pada Anda."/>
+  <meta property="og:image" content="https://jackton-lab.github.io/og-image.png"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://jackton-lab.github.io/"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Jackton — Sebar. Dominasi. Compounding."/>
+  <meta name="twitter:description" content="Digital Marketing Agency spesialis properti. Distribution memicu Virality, Attention pasar selalu tertuju pada Anda."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
@@ -310,8 +319,8 @@
       <a href="https://wa.me/6285725143083" class="cc glass rv" target="_blank" rel="noopener">
         <span class="ccico">💬</span><span class="cclbl">WhatsApp</span><span class="ccv">+62 857-2514-3083</span>
       </a>
-      <a href="mailto:bettercalljack.portal@gmail.com" class="cc glass rv d1">
-        <span class="ccico">✉️</span><span class="cclbl">Email</span><span class="ccv">bettercalljack.portal@gmail.com</span>
+      <a href="/cdn-cgi/l/email-protection#c7a5a2b3b3a2b5a4a6ababada6a4ace9b7a8b5b3a6ab87a0aaa6aeabe9a4a8aa" class="cc glass rv d1">
+        <span class="ccico">✉️</span><span class="cclbl">Email</span><span class="ccv"><span class="__cf_email__" data-cfemail="0260677676677061636e6e686361692c726d7076636e42656f636b6e2c616d6f">[email&#160;protected]</span></span>
       </a>
     </div>
   </div>
@@ -323,7 +332,7 @@
   <p>© 2026 Jackton</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Reveal
 document.querySelectorAll('.rv').forEach(el =>
   new IntersectionObserver(([e]) => e.isIntersecting && e.target.classList.add('on'), {threshold:.07}).observe(el)
@@ -339,7 +348,8 @@ function resize() {
   canvas.height = Math.round(Math.min(460, w * .5));
 }
 resize();
-window.addEventListener('resize', resize);
+let _rt;
+window.addEventListener('resize', () => { clearTimeout(_rt); _rt = setTimeout(resize, 150); });
 
 const W = () => canvas.width;
 const H = () => canvas.height;
@@ -347,33 +357,42 @@ const H = () => canvas.height;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lowEnd = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 2;
 const SKIP = (reduced || lowEnd) ? 3 : 1;
+const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+// Node colors adapt to light/dark mode
+const NC = {
+  src:  dark ? '#e5e5ea' : '#1c1c1e',
+  bank: dark ? '#d1d1d6' : '#2c2c2e',
+  dist: dark ? '#aeaeb2' : '#48484a',
+  plat: dark ? '#636366' : '#aeaeb2',
+};
 
 const NODES = [
-  {id:0,  rx:.38, ry:.10, r:14, t:'src',  f:'#1c1c1e'},
-  {id:1,  rx:.50, ry:.07, r:14, t:'src',  f:'#1c1c1e'},
-  {id:2,  rx:.62, ry:.10, r:14, t:'src',  f:'#1c1c1e'},
-  {id:3,  rx:.50, ry:.30, r:22, t:'bank', f:'#2c2c2e'},
-  {id:4,  rx:.22, ry:.28, r:11, t:'dist', f:'#48484a'},
-  {id:5,  rx:.30, ry:.50, r:11, t:'dist', f:'#48484a'},
-  {id:6,  rx:.42, ry:.57, r:11, t:'dist', f:'#48484a'},
-  {id:7,  rx:.58, ry:.57, r:11, t:'dist', f:'#48484a'},
-  {id:8,  rx:.70, ry:.50, r:11, t:'dist', f:'#48484a'},
-  {id:9,  rx:.78, ry:.28, r:11, t:'dist', f:'#48484a'},
-  {id:10, rx:.36, ry:.20, r:11, t:'dist', f:'#48484a'},
-  {id:11, rx:.64, ry:.20, r:11, t:'dist', f:'#48484a'},
-  {id:12, rx:.04, ry:.16, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:13, rx:.08, ry:.40, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:14, rx:.06, ry:.64, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:15, rx:.16, ry:.82, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:16, rx:.32, ry:.90, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:17, rx:.50, ry:.93, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:18, rx:.68, ry:.90, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:19, rx:.84, ry:.82, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:20, rx:.94, ry:.64, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:21, rx:.92, ry:.40, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:22, rx:.96, ry:.16, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:23, rx:.74, ry:.06, r:8,  t:'plat', f:'#aeaeb2'},
-  {id:24, rx:.26, ry:.06, r:8,  t:'plat', f:'#aeaeb2'},
+  {id:0,  rx:.38, ry:.10, r:14, t:'src',  f:NC.src},
+  {id:1,  rx:.50, ry:.07, r:14, t:'src',  f:NC.src},
+  {id:2,  rx:.62, ry:.10, r:14, t:'src',  f:NC.src},
+  {id:3,  rx:.50, ry:.30, r:22, t:'bank', f:NC.bank},
+  {id:4,  rx:.22, ry:.28, r:11, t:'dist', f:NC.dist},
+  {id:5,  rx:.30, ry:.50, r:11, t:'dist', f:NC.dist},
+  {id:6,  rx:.42, ry:.57, r:11, t:'dist', f:NC.dist},
+  {id:7,  rx:.58, ry:.57, r:11, t:'dist', f:NC.dist},
+  {id:8,  rx:.70, ry:.50, r:11, t:'dist', f:NC.dist},
+  {id:9,  rx:.78, ry:.28, r:11, t:'dist', f:NC.dist},
+  {id:10, rx:.36, ry:.20, r:11, t:'dist', f:NC.dist},
+  {id:11, rx:.64, ry:.20, r:11, t:'dist', f:NC.dist},
+  {id:12, rx:.04, ry:.16, r:8,  t:'plat', f:NC.plat},
+  {id:13, rx:.08, ry:.40, r:8,  t:'plat', f:NC.plat},
+  {id:14, rx:.06, ry:.64, r:8,  t:'plat', f:NC.plat},
+  {id:15, rx:.16, ry:.82, r:8,  t:'plat', f:NC.plat},
+  {id:16, rx:.32, ry:.90, r:8,  t:'plat', f:NC.plat},
+  {id:17, rx:.50, ry:.93, r:8,  t:'plat', f:NC.plat},
+  {id:18, rx:.68, ry:.90, r:8,  t:'plat', f:NC.plat},
+  {id:19, rx:.84, ry:.82, r:8,  t:'plat', f:NC.plat},
+  {id:20, rx:.94, ry:.64, r:8,  t:'plat', f:NC.plat},
+  {id:21, rx:.92, ry:.40, r:8,  t:'plat', f:NC.plat},
+  {id:22, rx:.96, ry:.16, r:8,  t:'plat', f:NC.plat},
+  {id:23, rx:.74, ry:.06, r:8,  t:'plat', f:NC.plat},
+  {id:24, rx:.26, ry:.06, r:8,  t:'plat', f:NC.plat},
 ];
 
 const EDGES = [
@@ -444,7 +463,7 @@ function loop() {
     const na = NODES[a], nb = NODES[b];
     const m = na.t === 'src' || na.t === 'bank';
     ctx.beginPath(); ctx.moveTo(px(na), py(na)); ctx.lineTo(px(nb), py(nb));
-    ctx.strokeStyle = m ? 'rgba(0,0,0,.08)' : 'rgba(0,0,0,.038)';
+    ctx.strokeStyle = m ? `rgba(${dark?'255,255,255':'0,0,0'},.08)` : `rgba(${dark?'255,255,255':'0,0,0'},.038)`;
     ctx.lineWidth = m ? 1.1 : .7; ctx.stroke();
   });
 
