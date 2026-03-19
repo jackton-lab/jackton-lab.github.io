@@ -1,137 +1,367 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jackton — Attention is the New Asset</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
     :root {
-      --white: #ffffff; --off: #f5f5f7; --light: #e8e8ed;
-      --mid: #a1a1a6; --dark: #1d1d1f; --black: #000000; --r: 18px;
+      --bg:       #f2f2f7;
+      --bg2:      #ffffff;
+      --surface:  rgba(255,255,255,0.72);
+      --surface2: rgba(255,255,255,0.55);
+      --stroke:   rgba(0,0,0,0.08);
+      --stroke2:  rgba(0,0,0,0.05);
+      --ink:      #000000;
+      --ink2:     #1c1c1e;
+      --ink3:     #3a3a3c;
+      --muted:    #8e8e93;
+      --blue:     #007aff;
+      --blue-bg:  rgba(0,122,255,0.08);
+      --r:        20px;
+      --r-sm:     14px;
     }
+
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--white); color: var(--dark); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg);
+      color: var(--ink2);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 2.5rem; height: 52px; background: rgba(255,255,255,0.82); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.07); }
-    .nav-logo { font-size: 1rem; font-weight: 600; color: var(--black); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { font-size: 0.78rem; color: var(--dark); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
-    .nav-links a:hover { opacity: 1; }
-    .nav-cta { font-size: 0.78rem; font-weight: 500; background: var(--black); color: var(--white); padding: 0.42rem 1.1rem; border-radius: 980px; text-decoration: none; }
-    .nav-cta:hover { opacity: 0.8; }
+    /* ── GLASS MIXIN via utility ── */
+    .glass {
+      background: var(--surface);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .glass-dark {
+      background: rgba(28,28,30,0.82);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
 
-    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 5rem; }
-    .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 2rem; opacity: 0; animation: up 0.7s 0.1s forwards; }
-    .eyebrow-line { width: 20px; height: 1px; background: var(--light); }
-    .hero h1 { font-size: clamp(2.6rem, 6.5vw, 5.5rem); font-weight: 600; line-height: 1.07; letter-spacing: -0.03em; color: var(--black); max-width: 800px; opacity: 0; animation: up 0.8s 0.2s forwards; }
-    .hero h1 em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
-    .hero-sub { margin-top: 1.6rem; font-size: 1.05rem; font-weight: 300; color: var(--mid); max-width: 480px; line-height: 1.68; opacity: 0; animation: up 0.8s 0.35s forwards; }
-    .hero-actions { margin-top: 2.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: up 0.8s 0.5s forwards; }
-    .btn { display: inline-flex; align-items: center; font-size: 0.83rem; font-weight: 500; text-decoration: none; padding: 0.72rem 1.7rem; border-radius: 980px; transition: opacity 0.2s, transform 0.2s; }
-    .btn:hover { opacity: 0.78; transform: translateY(-1px); }
-    .btn-dark { background: var(--black); color: var(--white); }
-    .btn-outline { background: transparent; color: var(--dark); border: 1px solid var(--light); }
-    .hero-scroll { margin-top: 4.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: up 0.8s 0.8s forwards; }
-    .scroll-bar { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--dark), transparent); }
-    .scroll-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
+    /* ── NAV (Dynamic Island style) ── */
+    .nav-wrap {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 300; width: calc(100% - 32px); max-width: 720px;
+    }
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 1.2rem; height: 48px; border-radius: 980px;
+      background: rgba(28,28,30,0.78);
+      backdrop-filter: saturate(200%) blur(32px);
+      -webkit-backdrop-filter: saturate(200%) blur(32px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1px 0 rgba(255,255,255,0.06) inset;
+    }
+    .nav-logo { font-size: 0.95rem; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; }
+    .nav-links a { font-size: 0.75rem; color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      font-size: 0.75rem; font-weight: 600;
+      background: var(--blue); color: #fff;
+      padding: 0.35rem 1rem; border-radius: 980px;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
 
-    section { padding: 6.5rem 2rem; }
-    .container { max-width: 980px; margin: 0 auto; }
-    .label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); margin-bottom: 1rem; }
-    h2 { font-size: clamp(1.9rem, 3.8vw, 2.8rem); font-weight: 600; letter-spacing: -0.025em; line-height: 1.12; color: var(--black); max-width: 560px; }
-    h2 em { font-family: 'Playfair Display', serif; font-style: italic; }
-    .section-sub { margin-top: 1rem; font-size: 0.95rem; font-weight: 300; color: var(--mid); max-width: 460px; line-height: 1.7; }
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 9rem 1.5rem 6rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .hero-blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.35;
+    }
+    .hero-blob-1 { width: 500px; height: 500px; background: radial-gradient(circle, #007aff 0%, transparent 70%); top: -100px; left: -100px; }
+    .hero-blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #5856d6 0%, transparent 70%); bottom: -50px; right: -80px; }
+    .hero-blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, #34c759 0%, transparent 70%); top: 40%; right: 10%; }
 
-    .statement { background: var(--black); padding: 8rem 2rem; text-align: center; }
-    .statement p { font-size: clamp(1.4rem, 3.5vw, 2.4rem); font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.45; letter-spacing: -0.02em; max-width: 720px; margin: 0 auto; }
-    .statement p strong { color: var(--white); font-weight: 600; }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(0,122,255,0.12);
+      border: 1px solid rgba(0,122,255,0.25);
+      border-radius: 980px; padding: 0.35rem 0.9rem;
+      font-size: 0.72rem; font-weight: 500; color: var(--blue);
+      margin-bottom: 2rem;
+      opacity: 0; animation: up 0.6s 0.1s forwards;
+    }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      font-weight: 700; line-height: 1.06; letter-spacing: -0.035em;
+      color: var(--ink);
+      opacity: 0; animation: up 0.7s 0.2s forwards;
+    }
+    .hero h1 em {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-weight: 700;
+      background: linear-gradient(135deg, var(--blue) 0%, #5856d6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 1.5rem; font-size: 1.05rem; font-weight: 300;
+      color: var(--muted); max-width: 460px; line-height: 1.68;
+      opacity: 0; animation: up 0.7s 0.35s forwards;
+    }
+    .hero-actions {
+      margin-top: 2.5rem; display: flex; gap: 0.75rem;
+      flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: up 0.7s 0.5s forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center;
+      font-size: 0.85rem; font-weight: 600; text-decoration: none;
+      padding: 0.75rem 1.8rem; border-radius: 980px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.82; transform: translateY(-1px); }
+    .btn-blue { background: var(--blue); color: #fff; box-shadow: 0 4px 20px rgba(0,122,255,0.35); }
+    .btn-glass {
+      background: var(--surface); color: var(--ink2);
+      backdrop-filter: blur(20px); border: 1px solid var(--stroke);
+    }
 
-    /* NETWORK */
-    .network-section { background: var(--off); padding: 6rem 2rem; }
-    .network-wrap { margin-top: 3.5rem; background: var(--white); border-radius: var(--r); border: 1px solid var(--light); padding: 2.5rem 2rem 2rem; }
+    /* ── SHARED ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .label {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 0.9rem;
+    }
+    .label::before { content: ''; width: 16px; height: 1.5px; background: var(--blue); border-radius: 2px; }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1; color: var(--ink);
+    }
+    h2 em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
+    .section-sub {
+      margin-top: 0.8rem; font-size: 0.93rem; font-weight: 300;
+      color: var(--muted); max-width: 440px; line-height: 1.7;
+    }
+
+    /* ── STATEMENT ── */
+    .statement {
+      background: var(--ink); padding: 7rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .statement::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(0,122,255,0.15) 0%, transparent 65%);
+    }
+    .statement p {
+      position: relative; z-index: 1;
+      font-size: clamp(1.3rem, 3.2vw, 2.2rem); font-weight: 300;
+      color: rgba(255,255,255,0.42); line-height: 1.5;
+      letter-spacing: -0.02em; max-width: 680px; margin: 0 auto;
+    }
+    .statement p strong { color: #fff; font-weight: 700; }
+
+    /* ── NETWORK ── */
+    .network-bg { background: var(--bg); }
+    .network-card {
+      margin-top: 3rem; border-radius: var(--r);
+      overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--stroke);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      padding: 2rem 1.5rem 1.5rem;
+    }
     #networkCanvas { width: 100%; display: block; }
-    .network-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.8rem; padding-top: 1.5rem; border-top: 1px solid var(--light); justify-content: center; }
-    .legend-item { display: flex; align-items: center; gap: 0.45rem; font-size: 0.73rem; color: var(--mid); }
-    .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .network-legend {
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+      margin-top: 1.5rem; padding-top: 1.2rem;
+      border-top: 1px solid var(--stroke2);
+      justify-content: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    .problems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; margin-top: 3.5rem; }
-    .problem-card { background: var(--white); border-radius: var(--r); padding: 2rem; border: 1px solid var(--light); transition: box-shadow 0.3s, transform 0.3s; }
-    .problem-card:hover { box-shadow: 0 6px 30px rgba(0,0,0,0.07); transform: translateY(-2px); }
-    .pnum { font-size: 0.65rem; font-weight: 500; color: var(--mid); letter-spacing: 0.1em; margin-bottom: 0.8rem; }
-    .problem-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--black); margin-bottom: 0.5rem; }
-    .problem-card p { font-size: 0.83rem; color: var(--mid); line-height: 1.65; }
+    /* ── MASALAH ── */
+    .problems-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 2.5rem; }
+    .pcard {
+      background: var(--bg2); border-radius: var(--r-sm);
+      padding: 1.5rem; border: 1px solid var(--stroke);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .pcard:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .pcard-num { font-size: 0.62rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.6rem; }
+    .pcard h3 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; line-height: 1.3; }
+    .pcard p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
 
-    .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 3.5rem; }
-    .pillar-card { background: var(--white); border-radius: var(--r); padding: 2rem; border: 1px solid var(--light); transition: box-shadow 0.3s, transform 0.3s; }
-    .pillar-card:hover { box-shadow: 0 6px 30px rgba(0,0,0,0.07); transform: translateY(-2px); }
-    .p-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--black); display: flex; align-items: center; justify-content: center; margin-bottom: 1.3rem; }
-    .p-icon svg { width: 18px; height: 18px; fill: white; }
-    .pillar-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--black); margin-bottom: 0.25rem; }
-    .platform { font-size: 0.75rem; color: var(--mid); margin-bottom: 1rem; }
-    .pillar-card ul { list-style: none; }
-    .pillar-card ul li { font-size: 0.8rem; color: var(--mid); line-height: 1.7; display: flex; gap: 0.5rem; }
-    .pillar-card ul li::before { content: '·'; color: var(--dark); flex-shrink: 0; }
+    /* ── PILAR ── */
+    .pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.5rem; }
+    .pilar {
+      background: var(--bg2); border-radius: var(--r-sm);
+      padding: 1.6rem; border: 1px solid var(--stroke);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .pilar:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .pilar-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; font-size: 1rem;
+    }
+    .pilar-icon.blue { background: var(--blue-bg); }
+    .pilar-icon.purple { background: rgba(88,86,214,0.1); }
+    .pilar-icon.green { background: rgba(52,199,89,0.1); }
+    .pilar-num { font-size: 0.62rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .pilar h3 { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
+    .pilar-plat { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.8rem; }
+    .pilar ul { list-style: none; }
+    .pilar ul li { font-size: 0.78rem; color: var(--muted); line-height: 1.7; display: flex; gap: 0.4rem; }
+    .pilar ul li::before { content: '·'; color: var(--blue); flex-shrink: 0; font-size: 1rem; line-height: 1.4; }
 
-    .compare-box { margin-top: 3.5rem; border-radius: var(--r); overflow: hidden; border: 1px solid var(--light); background: var(--white); }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { background: var(--off); }
-    th { padding: 0.9rem 1.4rem; text-align: left; font-size: 0.68rem; font-weight: 500; color: var(--mid); letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--light); }
-    th.hl { color: var(--black); background: rgba(0,0,0,0.02); }
-    td { padding: 0.9rem 1.4rem; font-size: 0.83rem; color: var(--mid); border-bottom: 1px solid var(--light); }
-    tr:last-child td { border-bottom: none; }
-    td:first-child { color: var(--dark); font-weight: 500; }
-    td.hl { color: var(--black); background: rgba(0,0,0,0.015); font-weight: 500; }
+    /* ── COMPARE — card stacked, mobile-friendly ── */
+    .compare-section { background: var(--bg); }
+    .compare-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.5rem; }
+    .compare-card {
+      border-radius: var(--r-sm); padding: 1.5rem;
+      border: 1px solid var(--stroke); background: var(--bg2);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+    }
+    .compare-card.featured {
+      background: var(--ink); border-color: transparent;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .compare-card-title {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem;
+    }
+    .compare-card.featured .compare-card-title { color: rgba(255,255,255,0.5); }
+    .compare-badge {
+      display: inline-block; background: var(--blue);
+      color: #fff; font-size: 0.62rem; font-weight: 600;
+      padding: 0.2rem 0.55rem; border-radius: 980px; margin-bottom: 0.4rem;
+    }
+    .compare-name {
+      font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 1.2rem;
+    }
+    .compare-card.featured .compare-name { color: #fff; }
+    .compare-row {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      padding: 0.55rem 0; border-bottom: 1px solid var(--stroke2);
+      font-size: 0.78rem; color: var(--muted);
+    }
+    .compare-card.featured .compare-row { border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row .cr-label { flex: 1; }
+    .cr-val { font-weight: 500; color: var(--ink3); white-space: nowrap; }
+    .compare-card.featured .cr-val { color: #fff; }
+    .cr-check { color: var(--blue); font-weight: 700; }
 
-    .steps-box { margin-top: 3.5rem; border: 1px solid var(--light); border-radius: var(--r); overflow: hidden; background: var(--white); }
-    .step-row { display: flex; gap: 2rem; align-items: flex-start; padding: 1.8rem 2.2rem; border-bottom: 1px solid var(--light); transition: background 0.2s; }
-    .step-row:last-child { border-bottom: none; }
-    .step-row:hover { background: var(--off); }
-    .step-n { font-size: 0.68rem; font-weight: 500; color: var(--mid); padding-top: 0.15rem; min-width: 28px; letter-spacing: 0.1em; }
-    .step-row h4 { font-size: 0.9rem; font-weight: 600; color: var(--black); margin-bottom: 0.3rem; }
-    .step-row p { font-size: 0.8rem; color: var(--mid); line-height: 1.65; }
+    /* ── STEPS ── */
+    .steps-wrap { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; background: var(--bg2); border-radius: var(--r); border: 1px solid var(--stroke); overflow: hidden; box-shadow: 0 1px 12px rgba(0,0,0,0.05); }
+    .step {
+      display: flex; gap: 1.5rem; padding: 1.5rem 1.8rem;
+      border-bottom: 1px solid var(--stroke2);
+      transition: background 0.2s; cursor: default;
+    }
+    .step:last-child { border-bottom: none; }
+    .step:hover { background: var(--bg); }
+    .step-n {
+      min-width: 28px; height: 28px; border-radius: 50%;
+      background: var(--blue-bg); color: var(--blue);
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .step h4 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
+    .step p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
 
-    .stats-dark { background: var(--black); padding: 6rem 2rem; }
-    .stats-dark .label { color: rgba(255,255,255,0.4); }
-    .stats-dark h2 { color: var(--white); }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(255,255,255,0.07); border-radius: var(--r); overflow: hidden; margin-top: 3.5rem; }
-    .stat-card { background: var(--black); padding: 3rem 2rem; text-align: center; }
-    .stat-val { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 600; color: var(--white); letter-spacing: -0.03em; line-height: 1; }
-    .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.38); margin-top: 0.6rem; line-height: 1.5; }
+    /* ── STATS ── */
+    .stats-section { background: var(--ink); padding: 5rem 1.5rem; position: relative; overflow: hidden; }
+    .stats-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,122,255,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(88,86,214,0.1) 0%, transparent 50%);
+    }
+    .stats-section .label { color: rgba(255,255,255,0.4); position: relative; z-index: 1; }
+    .stats-section h2 { color: #fff; position: relative; z-index: 1; }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: rgba(255,255,255,0.06);
+      border-radius: var(--r); overflow: hidden; margin-top: 2.5rem;
+      position: relative; z-index: 1;
+    }
+    .stat { background: rgba(255,255,255,0.03); padding: 2.5rem 1.5rem; text-align: center; }
+    .stat-val {
+      font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
+      color: #fff; letter-spacing: -0.03em; line-height: 1;
+    }
+    .stat-val span { background: linear-gradient(135deg,#007aff,#5856d6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 0.5rem; line-height: 1.5; }
 
-    .forwho-list { margin-top: 3rem; }
-    .fw-item { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.8rem 0; border-bottom: 1px solid var(--light); }
-    .fw-item:first-child { border-top: 1px solid var(--light); }
-    .fw-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dark); margin-top: 0.4rem; flex-shrink: 0; }
-    .fw-item h3 { font-size: 0.95rem; font-weight: 600; color: var(--black); margin-bottom: 0.3rem; }
-    .fw-item p { font-size: 0.83rem; color: var(--mid); line-height: 1.65; }
-
-    .contact-section { padding: 9rem 2rem; text-align: center; }
+    /* ── CONTACT ── */
+    .contact-section { text-align: center; padding: 7rem 1.5rem; }
     .contact-section h2 { margin: 0 auto; }
-    .contact-section .section-sub { margin: 1rem auto 0; }
-    .contact-cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem; }
-    .contact-card { background: var(--off); border-radius: var(--r); padding: 1.8rem 2.5rem; text-decoration: none; color: var(--dark); border: 1px solid var(--light); transition: background 0.2s, box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; min-width: 210px; }
-    .contact-card:hover { background: var(--white); box-shadow: 0 8px 30px rgba(0,0,0,0.07); transform: translateY(-2px); }
-    .c-icon { font-size: 1.4rem; }
-    .c-label { font-size: 0.68rem; color: var(--mid); text-transform: uppercase; letter-spacing: 0.1em; }
-    .c-val { font-size: 0.85rem; font-weight: 500; color: var(--black); }
+    .contact-section .section-sub { margin: 0.8rem auto 0; }
+    .contact-cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
+    .contact-card {
+      background: var(--bg2); border-radius: var(--r-sm);
+      padding: 1.6rem 2.2rem; text-decoration: none; color: var(--ink2);
+      border: 1px solid var(--stroke);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+      min-width: 200px;
+    }
+    .contact-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .c-icon { font-size: 1.3rem; }
+    .c-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .c-val { font-size: 0.82rem; font-weight: 600; color: var(--ink); }
 
-    footer { padding: 1.8rem 2.5rem; border-top: 1px solid var(--light); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .f-logo { font-size: 0.9rem; font-weight: 600; color: var(--black); }
-    footer p { font-size: 0.73rem; color: var(--mid); }
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 2rem; border-top: 1px solid var(--stroke);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.8rem; background: var(--bg2);
+    }
+    .f-logo { font-size: 0.88rem; font-weight: 700; color: var(--ink); }
+    footer p { font-size: 0.7rem; color: var(--muted); }
 
-    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: none; }
-    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
-    @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
 
-    @media (max-width: 768px) {
-      nav { padding: 0 1.2rem; } .nav-links { display: none; }
-      section, .network-section, .stats-dark, .contact-section { padding: 4.5rem 1.2rem; }
-      .problems-grid, .pillars-grid { grid-template-columns: 1fr; }
+    @keyframes up { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: none; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .nav-wrap { top: 12px; width: calc(100% - 24px); }
+      section { padding: 4rem 1.2rem; }
+      .statement, .stats-section { padding: 5rem 1.2rem; }
+      .contact-section { padding: 5rem 1.2rem; }
+      .problems-grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; }
-      .step-row { flex-direction: column; gap: 0.4rem; padding: 1.4rem 1.2rem; }
+      .step { padding: 1.2rem; gap: 1rem; }
       footer { flex-direction: column; text-align: center; }
       .contact-cards { flex-direction: column; align-items: stretch; }
     }
@@ -139,152 +369,176 @@
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">Jackton</div>
-  <ul class="nav-links">
-    <li><a href="#masalah">Konteks</a></li>
-    <li><a href="#sistem">Sistem</a></li>
-    <li><a href="#cara-kerja">Cara Kerja</a></li>
-    <li><a href="#kontak">Kontak</a></li>
-  </ul>
-  <a href="#kontak" class="nav-cta">Hubungi Kami</a>
-</nav>
-
-<section class="hero">
-  <div class="hero-eyebrow"><span class="eyebrow-line"></span>Digital Marketing & Creative Agency — Properti</div>
-  <h1>Attention adalah<br><em>aset digital</em><br>yang paling berharga.</h1>
-  <p class="hero-sub">Di era ini, perhatian publik adalah mata uang baru. Jackton membantu pelaku industri properti menguasainya — bukan hanya mengiklankan.</p>
-  <div class="hero-actions">
-    <a href="#kontak" class="btn btn-dark">Mulai Bersama Jackton</a>
-    <a href="#masalah" class="btn btn-outline">Pelajari Lebih Lanjut</a>
-  </div>
-  <div class="hero-scroll"><div class="scroll-bar"></div><span class="scroll-label">Scroll</span></div>
-</section>
-
-<div class="statement">
-  <p>Marketing properti konvensional hanya mengejar <strong>leads</strong> — tapi tidak pernah membangun <strong>kepercayaan</strong> sebelum pertemuan pertama. Jackton membalik paradigma itu.</p>
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav>
+    <div class="nav-logo">Jackton</div>
+    <ul class="nav-links">
+      <li><a href="#sistem">Sistem</a></li>
+      <li><a href="#cara-kerja">Cara Kerja</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <a href="#kontak" class="nav-cta">Hubungi Kami</a>
+  </nav>
 </div>
 
-<!-- NETWORK DIAGRAM -->
-<section class="network-section" id="sistem">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-pill"><span class="pill-dot"></span>Digital Marketing & Creative Agency — Properti</div>
+    <h1>Attention adalah<br><em>aset digital</em><br>yang paling berharga.</h1>
+    <p class="hero-sub">Jackton membantu pelaku industri properti membangun perhatian publik sebagai aset jangka panjang — bukan iklan yang mati saat budget habis.</p>
+    <div class="hero-actions">
+      <a href="#kontak" class="btn btn-blue">Mulai Bersama Jackton</a>
+      <a href="#sistem" class="btn btn-glass">Lihat Sistem ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<div class="statement">
+  <p>Marketing properti konvensional hanya mengejar <strong>leads</strong> — tapi tidak pernah membangun <strong>kepercayaan</strong> sebelum pertemuan pertama.</p>
+</div>
+
+<!-- NETWORK -->
+<section class="network-bg" id="sistem">
   <div class="container">
     <div class="label reveal">Ekosistem Distribusi</div>
-    <h2 class="reveal">Dari 3 sumber konten —<br>meledak ke ribuan titik.</h2>
-    <p class="section-sub reveal">Konten dari Instagram, bank konten internal, dan talent/UGC dikumpulkan lalu didistribusikan oleh puluhan clipper ke ratusan akun TikTok & Reels setiap hari.</p>
-    <div class="network-wrap reveal">
+    <h2 class="reveal">Dari 3 sumber — meledak<br>ke ribuan titik.</h2>
+    <p class="section-sub reveal">Konten dikumpulkan di bank konten terpusat, lalu didistribusikan oleh puluhan clipper ke ratusan akun TikTok & Reels setiap hari.</p>
+    <div class="network-card reveal">
       <canvas id="networkCanvas"></canvas>
       <div class="network-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#1d1d1f"></div>Sumber Konten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#3a3a3c"></div>Bank Konten (Drive)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1c1c1e"></div>Sumber Konten</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3a3a3c"></div>Bank Konten</div>
         <div class="legend-item"><div class="legend-dot" style="background:#636366"></div>Clipper</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#aeaeb2"></div>Akun TikTok / Reels</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#aeaeb2"></div>TikTok / Reels</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#007aff"></div>Audiens</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="masalah">
+<!-- PILAR -->
+<section style="background:var(--bg2)">
   <div class="container">
-    <div class="label reveal">Konteks</div>
-    <h2 class="reveal">Apa yang selama ini<br>terlewatkan industri properti.</h2>
-    <p class="section-sub reveal">Developer menghabiskan budget besar untuk iklan yang mati begitu anggaran habis — tanpa jejak digital yang bekerja sendiri.</p>
-    <div class="problems-grid">
-      <div class="problem-card reveal"><div class="pnum">01</div><h3>Iklan berhenti, aset pun hilang</h3><p>Setiap campaign konvensional berakhir tanpa meninggalkan apapun. Tidak ada konten yang terus bekerja, tidak ada jejak yang compounding.</p></div>
-      <div class="problem-card reveal d1"><div class="pnum">02</div><h3>Leads datang tanpa konteks</h3><p>Calon pembeli tiba cold — tanpa mengenal produk. Sales harus mengedukasi dari nol setiap kali, memperpanjang siklus closing.</p></div>
-      <div class="problem-card reveal d2"><div class="pnum">03</div><h3>Distribusi bergantung pada budget</h3><p>Jangkauan berbanding lurus dengan pengeluaran. Tidak ada sistem yang tumbuh sendiri tanpa biaya yang terus membengkak.</p></div>
-      <div class="problem-card reveal d3"><div class="pnum">04</div><h3>Tidak ada efek compounding</h3><p>Model iklan konvensional tidak membangun momentum. Setiap bulan dimulai dari nol — padahal attention bisa diakumulasi.</p></div>
-    </div>
-  </div>
-</section>
-
-<section style="background:var(--off)">
-  <div class="container">
-    <div class="label reveal">Pendekatan</div>
-    <h2 class="reveal">Tiga pilar ekosistem<br>attention Jackton.</h2>
-    <p class="section-sub reveal">Bukan sekadar konten — sistem distribusi yang terus tumbuh dan meninggalkan aset digital aktif setiap bulannya.</p>
+    <div class="label reveal">Tiga Pilar</div>
+    <h2 class="reveal">Sistem yang bekerja<br>saat kamu tidur.</h2>
     <div class="pillars-grid">
-      <div class="pillar-card reveal">
-        <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
-        <div class="pnum">PILAR 01</div><h3>Prestige Channel</h3><div class="platform">Brand & Trust</div>
-        <ul><li>Identitas brand yang aspirasional</li><li>Konten edukasi & lifestyle premium</li><li>Referensi pertama calon pembeli</li></ul>
+      <div class="pilar reveal">
+        <div class="pilar-icon blue">📱</div>
+        <div class="pilar-num">PILAR 01</div>
+        <h3>Prestige Channel</h3>
+        <div class="pilar-plat">Brand & Trust</div>
+        <ul>
+          <li>Identitas brand aspirasional</li>
+          <li>Konten edukasi & lifestyle premium</li>
+          <li>Jadi referensi pertama calon pembeli</li>
+        </ul>
       </div>
-      <div class="pillar-card reveal d1">
-        <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg></div>
-        <div class="pnum">PILAR 02</div><h3>Viral Engine</h3><div class="platform">Distribusi & Volume</div>
-        <ul><li>Puluhan clipper dengan multi-akun & multi-device</li><li>1–10 konten per akun per hari</li><li>Distribusi hanya TikTok & Reels</li></ul>
+      <div class="pilar reveal d1">
+        <div class="pilar-icon purple">⚡</div>
+        <div class="pilar-num">PILAR 02</div>
+        <h3>Viral Engine</h3>
+        <div class="pilar-plat">Distribusi & Volume</div>
+        <ul>
+          <li>Puluhan clipper, multi-akun & multi-device</li>
+          <li>1–10 konten per akun per hari</li>
+          <li>Hanya TikTok & Reels</li>
+        </ul>
       </div>
-      <div class="pillar-card reveal d2">
-        <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-        <div class="pnum">PILAR 03</div><h3>Community Scale</h3><div class="platform">Amplifikasi & Performa</div>
-        <ul><li>UGC, endorsement & talent eksternal</li><li>Komisi berbasis views — bayar performa</li><li>Skala tanpa overhead biaya linear</li></ul>
+      <div class="pilar reveal d2">
+        <div class="pilar-icon green">🌐</div>
+        <div class="pilar-num">PILAR 03</div>
+        <h3>Community Scale</h3>
+        <div class="pilar-plat">UGC & Performa</div>
+        <ul>
+          <li>UGC, endorsement & talent eksternal</li>
+          <li>Komisi berbasis views — bayar performa</li>
+          <li>Skala tanpa biaya overhead linear</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<section style="background:var(--off)">
+<!-- COMPARE -->
+<section class="compare-section">
   <div class="container">
-    <div class="label reveal">Keunggulan</div>
-    <h2 class="reveal">Bukan lebih murah —<br>tapi aset yang terus bekerja.</h2>
-    <div class="compare-box reveal">
-      <table>
-        <thead><tr><th>Aspek</th><th>Media Konvensional</th><th>Digital Ads</th><th class="hl">Jackton ✦</th></tr></thead>
-        <tbody>
-          <tr><td>Setelah berhenti</td><td>Hilang</td><td>Hilang</td><td class="hl">✓ Konten tetap aktif</td></tr>
-          <tr><td>Aset tersisa</td><td>Tidak ada</td><td>Tidak ada</td><td class="hl">✓ Ribuan konten aktif</td></tr>
-          <tr><td>Efek compounding</td><td>Tidak ada</td><td>Tidak ada</td><td class="hl">✓ Tumbuh tiap bulan</td></tr>
-          <tr><td>Leads yang masuk</td><td>Cold</td><td>Sebagian aware</td><td class="hl">✓ Warm, kenal brand</td></tr>
-          <tr><td>Terukur</td><td>Sulit</td><td>Sebagian</td><td class="hl">✓ Transparan harian</td></tr>
-        </tbody>
-      </table>
+    <div class="label reveal">Perbandingan</div>
+    <h2 class="reveal">Kenapa Jackton<br>berbeda.</h2>
+    <div class="compare-grid">
+      <div class="compare-card reveal">
+        <div class="compare-card-title">Media Konvensional</div>
+        <div class="compare-name">Billboard & Cetak</div>
+        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val">Hilang</span></div>
+        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val">Tidak ada</span></div>
+        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val">Tidak ada</span></div>
+        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val">Cold</span></div>
+        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val">Sulit</span></div>
+      </div>
+      <div class="compare-card reveal d1">
+        <div class="compare-card-title">Digital Ads</div>
+        <div class="compare-name">Meta / Google Ads</div>
+        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val">Hilang</span></div>
+        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val">Tidak ada</span></div>
+        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val">Tidak ada</span></div>
+        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val">Sebagian aware</span></div>
+        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val">Sebagian</span></div>
+      </div>
+      <div class="compare-card featured reveal d2">
+        <div class="compare-card-title">Jackton</div>
+        <div class="compare-badge">Rekomendasi</div>
+        <div class="compare-name">Evergreen Network</div>
+        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val"><span class="cr-check">✓</span> Tetap aktif</span></div>
+        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val"><span class="cr-check">✓</span> Ribuan konten</span></div>
+        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val"><span class="cr-check">✓</span> Tumbuh tiap bulan</span></div>
+        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val"><span class="cr-check">✓</span> Warm</span></div>
+        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val"><span class="cr-check">✓</span> Transparan harian</span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="cara-kerja">
+<!-- CARA KERJA -->
+<section style="background:var(--bg2)" id="cara-kerja">
   <div class="container">
     <div class="label reveal">Cara Kerja</div>
-    <h2 class="reveal">Dari konten mentah ke<br>calon pembeli yang informed.</h2>
-    <p class="section-sub reveal">Setiap langkah dirancang agar sistem bekerja mandiri — dan semakin kuat seiring waktu.</p>
-    <div class="steps-box reveal">
-      <div class="step-row"><div class="step-n">01</div><div><h4>3 Sumber Konten</h4><p>Konten original dari Instagram/TikTok brand, mentahan dari tim internal yang disimpan di Google Drive, dan video dari endorsement, UGC, serta talent eksternal.</p></div></div>
-      <div class="step-row"><div class="step-n">02</div><div><h4>Bank Konten Terpusat</h4><p>Semua mentahan dikumpulkan di Google Drive sebagai sumber tunggal yang bisa diakses seluruh jaringan clipper kapan saja.</p></div></div>
-      <div class="step-row"><div class="step-n">03</div><div><h4>Distribusi oleh Puluhan Clipper</h4><p>Setiap clipper memegang 2–4 akun atau lebih, dengan 1–10 konten per akun per hari. Satu clipper bisa mengoperasikan multi-device untuk memaksimalkan output.</p></div></div>
-      <div class="step-row"><div class="step-n">04</div><div><h4>Ledakan di TikTok & Reels</h4><p>Distribusi difokuskan hanya ke TikTok video dan Instagram Reels — platform dengan algoritma distribusi organik terkuat saat ini.</p></div></div>
-      <div class="step-row"><div class="step-n">05</div><div><h4>Calon Pembeli Datang Warm</h4><p>Setelah terekspos konten berulang kali, calon pembeli mencari kontak secara mandiri. Mereka datang ke sales sudah mengenal brand — bukan cold.</p></div></div>
+    <h2 class="reveal">Lima langkah yang<br>mengubah konten jadi aset.</h2>
+    <div class="steps-wrap reveal">
+      <div class="step"><div class="step-n">01</div><div><h4>3 Sumber Konten</h4><p>IG/TikTok brand, mentahan internal di Drive, dan video dari UGC / talent / endorsement.</p></div></div>
+      <div class="step"><div class="step-n">02</div><div><h4>Bank Konten Terpusat</h4><p>Semua mentahan masuk ke Google Drive — sumber tunggal yang bisa diakses seluruh jaringan clipper.</p></div></div>
+      <div class="step"><div class="step-n">03</div><div><h4>Puluhan Clipper Bekerja</h4><p>Setiap clipper punya 2–4 akun (atau lebih), multi-device, posting 1–10 konten per akun per hari.</p></div></div>
+      <div class="step"><div class="step-n">04</div><div><h4>Ledakan di TikTok & Reels</h4><p>Distribusi difokuskan ke algoritma organik terkuat — TikTok video dan Instagram Reels.</p></div></div>
+      <div class="step"><div class="step-n">05</div><div><h4>Leads Datang Warm</h4><p>Calon pembeli yang terekspos konten berulang mencari kontak sendiri — datang ke sales sudah mengenal brand.</p></div></div>
     </div>
   </div>
 </section>
 
-<section class="stats-dark">
+<!-- STATS -->
+<section class="stats-section">
   <div class="container">
     <div class="label reveal">Output</div>
-    <h2 class="reveal">Angka yang<br>berbicara sendiri.</h2>
+    <h2 class="reveal">Angka yang berbicara.</h2>
     <div class="stats-grid">
-      <div class="stat-card reveal"><div class="stat-val">390+</div><div class="stat-label">Konten aktif per bulan di platform</div></div>
-      <div class="stat-card reveal d1"><div class="stat-val">5jt+</div><div class="stat-label">Estimasi views organik per bulan</div></div>
-      <div class="stat-card reveal d2"><div class="stat-val">∞</div><div class="stat-label">Konten tetap aktif selama platform hidup</div></div>
+      <div class="stat reveal"><div class="stat-val"><span>390+</span></div><div class="stat-label">Konten aktif per bulan di platform</div></div>
+      <div class="stat reveal d1"><div class="stat-val"><span>5jt+</span></div><div class="stat-label">Estimasi views organik per bulan</div></div>
+      <div class="stat reveal d2"><div class="stat-val"><span>∞</span></div><div class="stat-label">Konten aktif selama platform hidup</div></div>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="container">
-    <div class="label reveal">Untuk Siapa</div>
-    <h2 class="reveal">Jackton untuk mereka yang<br>ingin bermain berbeda.</h2>
-    <div class="forwho-list">
-      <div class="fw-item reveal"><div class="fw-dot"></div><div><h3>Developer Properti</h3><p>Yang ingin membangun awareness jangka panjang dan mengurangi ketergantungan pada iklan berbayar yang habis tanpa jejak.</p></div></div>
-      <div class="fw-item reveal"><div class="fw-dot"></div><div><h3>Pelaku Komersial Properti</h3><p>Agen, broker, atau tim pemasaran yang ingin sistem distribusi scalable tanpa biaya yang tumbuh proporsional.</p></div></div>
-      <div class="fw-item reveal"><div class="fw-dot"></div><div><h3>Brand Properti yang Sedang Tumbuh</h3><p>Yang membangun reputasi dan membutuhkan presence digital yang kuat, konsisten, dan terukur sejak hari pertama.</p></div></div>
-    </div>
-  </div>
-</section>
-
+<!-- CONTACT -->
 <section class="contact-section" id="kontak">
   <div class="container">
     <div class="label reveal">Mulai Sekarang</div>
     <h2 class="reveal">Siap membangun attention<br>sebagai aset?</h2>
-    <p class="section-sub reveal">Jackton terbuka untuk berdiskusi. Ceritakan proyekmu — kami bantu rancang sistem yang tepat.</p>
+    <p class="section-sub reveal">Ceritakan proyekmu. Jackton bantu rancang sistem yang tepat.</p>
     <div class="contact-cards">
       <a href="https://wa.me/6285725143083" class="contact-card reveal" target="_blank">
         <span class="c-icon">💬</span><span class="c-label">WhatsApp</span><span class="c-val">+62 857-2514-3083</span>
@@ -299,164 +553,111 @@
 <footer>
   <div class="f-logo">Jackton</div>
   <p>Digital Marketing & Creative Agency — Spesialis Properti</p>
-  <p>© 2026 Jackton. All rights reserved.</p>
+  <p>© 2026 Jackton</p>
 </footer>
 
 <script>
 // SCROLL REVEAL
 const els = document.querySelectorAll('.reveal');
-const obs = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.1 });
-els.forEach(el => obs.observe(el));
+new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.08 })
+  .observe ? document.querySelectorAll('.reveal').forEach(el => new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('visible')), { threshold: 0.08 }).observe(el)) : els.forEach(el => el.classList.add('visible'));
 
-// ── NETWORK DIAGRAM ──
-// Layout:
-// Layer 0 (top): 3 sumber konten
-// Layer 1 (mid-top): Bank Konten (1 node, center)
-// Layer 2 (mid): Clipper (8 nodes spread)
-// Layer 3 (bottom): Akun TikTok/Reels (many nodes)
-
+// NETWORK DIAGRAM
 const canvas = document.getElementById('networkCanvas');
 const ctx = canvas.getContext('2d');
-
 function setSize() {
-  const w = canvas.parentElement.clientWidth - 48;
-  canvas.width = w;
-  canvas.height = Math.round(Math.min(480, w * 0.54));
+  const w = canvas.parentElement.clientWidth - 32;
+  canvas.width = w; canvas.height = Math.round(Math.min(460, w * 0.52));
 }
-setSize();
-window.addEventListener('resize', () => { setSize(); });
+setSize(); window.addEventListener('resize', setSize);
+const W = () => canvas.width, H = () => canvas.height;
 
-const W = () => canvas.width;
-const H = () => canvas.height;
-
-// Nodes
 const NODES = [
-  // Layer 0 — 3 Sumber
-  { id: 0,  label: 'IG / TikTok\nBrand',   rx: 0.20, ry: 0.07, r: 18, fill: '#1d1d1f', tc: '#fff', layer: 0 },
-  { id: 1,  label: 'Bank Konten\n(Drive)',  rx: 0.50, ry: 0.07, r: 18, fill: '#1d1d1f', tc: '#fff', layer: 0 },
-  { id: 2,  label: 'UGC / Talent\nEndorse',rx: 0.80, ry: 0.07, r: 18, fill: '#1d1d1f', tc: '#fff', layer: 0 },
-
-  // Layer 1 — Bank Konten terpusat
-  { id: 3,  label: '📁 Bank Konten\nTerpusat (Drive)', rx: 0.50, ry: 0.28, r: 26, fill: '#3a3a3c', tc: '#fff', layer: 1 },
-
-  // Layer 2 — Clipper (8)
-  { id: 4,  label: 'Clipper 1\n2–4 akun', rx: 0.08,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 5,  label: 'Clipper 2\n2–4 akun', rx: 0.22,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 6,  label: 'Clipper 3\n2–4 akun', rx: 0.36,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 7,  label: 'Clipper 4\n2–4 akun', rx: 0.50,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 8,  label: 'Clipper 5\n2–4 akun', rx: 0.64,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 9,  label: 'Clipper 6\n2–4 akun', rx: 0.78,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-  { id: 10, label: '+ Puluhan\nClipper',   rx: 0.92,  ry: 0.54, r: 13, fill: '#636366', tc: '#fff', layer: 2 },
-
-  // Layer 3 — Akun distribusi (TikTok/Reels)
-  { id: 11, label: 'TikTok', rx: 0.05,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 12, label: 'Reels',  rx: 0.13,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 13, label: 'TikTok', rx: 0.21,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 14, label: 'Reels',  rx: 0.29,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 15, label: 'TikTok', rx: 0.37,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 16, label: 'Reels',  rx: 0.45,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 17, label: 'TikTok', rx: 0.53,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 18, label: 'Reels',  rx: 0.61,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 19, label: 'TikTok', rx: 0.69,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 20, label: 'Reels',  rx: 0.77,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 21, label: 'TikTok', rx: 0.85,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-  { id: 22, label: 'Reels',  rx: 0.93,  ry: 0.82, r: 9, fill: '#aeaeb2', tc: '#1d1d1f', layer: 3 },
-
-  // Layer 4 — Audiens
-  { id: 23, label: '👥 Audiens\nPropertyti', rx: 0.50, ry: 0.96, r: 20, fill: '#e5e5ea', tc: '#1d1d1f', layer: 4 },
+  { id:0,  label:'IG/TikTok\nBrand',    rx:0.18, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
+  { id:1,  label:'Mentahan\nInternal',  rx:0.50, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
+  { id:2,  label:'UGC &\nTalent',       rx:0.82, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
+  { id:3,  label:'📁 Bank Konten\nTerpusat', rx:0.50, ry:0.27, r:25, fill:'#3a3a3c', tc:'#fff' },
+  { id:4,  label:'Clipper\n×2–4 akun',  rx:0.08, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:5,  label:'Clipper\n×2–4 akun',  rx:0.22, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:6,  label:'Clipper\n×2–4 akun',  rx:0.36, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:7,  label:'Clipper\n×2–4 akun',  rx:0.50, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:8,  label:'Clipper\n×2–4 akun',  rx:0.64, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:9,  label:'Clipper\n×2–4 akun',  rx:0.78, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:10, label:'+ Puluhan\nClipper',   rx:0.92, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
+  { id:11, label:'TikTok', rx:0.05,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:12, label:'Reels',  rx:0.14,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:13, label:'TikTok', rx:0.23,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:14, label:'Reels',  rx:0.32,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:15, label:'TikTok', rx:0.41,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:16, label:'Reels',  rx:0.50,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:17, label:'TikTok', rx:0.59,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:18, label:'Reels',  rx:0.68,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:19, label:'TikTok', rx:0.77,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:20, label:'Reels',  rx:0.86,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:21, label:'TikTok', rx:0.95,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
+  { id:22, label:'👥 Audiens Properti', rx:0.50, ry:0.95, r:22, fill:'#007aff', tc:'#fff' },
 ];
 
 const EDGES = [
-  // Sources → Bank
   [0,3],[1,3],[2,3],
-  // Bank → Clippers
   [3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],
-  // Clippers → Akun
-  [4,11],[4,12],
-  [5,12],[5,13],
-  [6,13],[6,14],[6,15],
-  [7,15],[7,16],[7,17],
-  [8,17],[8,18],
-  [9,18],[9,19],[9,20],
-  [10,20],[10,21],[10,22],
-  // Akun → Audiens
-  [11,23],[13,23],[15,23],[17,23],[19,23],[21,23],
+  [4,11],[4,12],[5,12],[5,13],[6,13],[6,14],[6,15],
+  [7,15],[7,16],[7,17],[8,17],[8,18],[9,18],[9,19],[9,20],[10,20],[10,21],
+  [11,22],[13,22],[15,22],[17,22],[19,22],[21,22],
 ];
 
-let particles = [];
-let frame = 0;
-
-function px(n) { return n.rx * W(); }
-function py(n) { return n.ry * H(); }
-
-function spawnParticle() {
-  const e = EDGES[Math.floor(Math.random() * EDGES.length)];
-  particles.push({ a: e[0], b: e[1], t: 0, speed: 0.008 + Math.random() * 0.01 });
-}
-
-function drawFrame() {
-  ctx.clearRect(0, 0, W(), H());
-
-  // Edges
-  EDGES.forEach(([a, b]) => {
-    const na = NODES[a], nb = NODES[b];
-    ctx.beginPath(); ctx.moveTo(px(na), py(na)); ctx.lineTo(px(nb), py(nb));
-    // thicker lines for important connections
-    const isMainFlow = (na.layer === 0 && nb.layer === 1) || (na.layer === 1 && nb.layer === 2);
-    ctx.strokeStyle = isMainFlow ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.05)';
-    ctx.lineWidth = isMainFlow ? 1.5 : 1;
-    ctx.stroke();
-  });
-
-  // Particles
-  particles.forEach(p => {
-    const na = NODES[p.a], nb = NODES[p.b];
-    const x = px(na) + (px(nb) - px(na)) * p.t;
-    const y = py(na) + (py(nb) - py(na)) * p.t;
-    // color based on layer
-    const alpha = 0.6 - p.t * 0.3;
-    ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(29,29,31,${alpha})`; ctx.fill();
-  });
-
-  // Nodes
-  NODES.forEach(n => {
-    const x = px(n), y = py(n);
-    // pulse for bank konten node
-    if (n.id === 3) {
-      const pulse = (Math.sin(frame * 0.04) + 1) / 2;
-      ctx.beginPath(); ctx.arc(x, y, n.r + 8 * pulse, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(58,58,60,${0.15 * (1 - pulse)})`; ctx.lineWidth = 2; ctx.stroke();
-    }
-    ctx.beginPath(); ctx.arc(x, y, n.r, 0, Math.PI * 2);
-    ctx.fillStyle = n.fill; ctx.fill();
-    ctx.fillStyle = n.tc;
-    const fs = Math.max(7, n.r * 0.46);
-    ctx.font = `500 ${fs}px Inter, sans-serif`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const lines = n.label.split('\n');
-    const lh = fs * 1.3;
-    lines.forEach((l, i) => ctx.fillText(l, x, y + (i - (lines.length - 1) / 2) * lh));
-  });
-
-  // Layer labels (right side)
-  const layerLabels = ['Sumber', 'Bank Konten', 'Clipper', 'Distribusi', 'Audiens'];
-  const layerY = [0.07, 0.28, 0.54, 0.82, 0.96];
-  ctx.font = `400 ${Math.max(9, W() * 0.01)}px Inter, sans-serif`;
-  ctx.fillStyle = 'rgba(161,161,166,0.6)';
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  layerLabels.forEach((l, i) => {
-    ctx.fillText(l, W() - 4, layerY[i] * H());
-  });
-}
+let particles = [], frame = 0;
+const px = n => n.rx * W(), py = n => n.ry * H();
 
 function loop() {
   frame++;
+  ctx.clearRect(0, 0, W(), H());
+
+  EDGES.forEach(([a,b]) => {
+    const na = NODES[a], nb = NODES[b];
+    ctx.beginPath(); ctx.moveTo(px(na), py(na)); ctx.lineTo(px(nb), py(nb));
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)'; ctx.lineWidth = 1; ctx.stroke();
+  });
+
+  if (frame % 5 === 0 && particles.length < 50) {
+    const e = EDGES[Math.floor(Math.random() * EDGES.length)];
+    particles.push({ a: e[0], b: e[1], t: 0, speed: 0.008 + Math.random() * 0.009 });
+  }
   particles.forEach(p => { p.t += p.speed; });
   particles = particles.filter(p => p.t < 1);
-  if (frame % 5 === 0 && particles.length < 40) spawnParticle();
-  drawFrame();
+
+  particles.forEach(p => {
+    const na = NODES[p.a], nb = NODES[p.b];
+    const x = px(na) + (px(nb)-px(na)) * p.t;
+    const y = py(na) + (py(nb)-py(na)) * p.t;
+    const isToAudiens = p.b === 22;
+    ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI*2);
+    ctx.fillStyle = isToAudiens ? `rgba(0,122,255,${0.7 - p.t * 0.4})` : `rgba(28,28,30,${0.5 - p.t * 0.2})`;
+    ctx.fill();
+  });
+
+  NODES.forEach(n => {
+    const x = px(n), y = py(n);
+    if (n.id === 3) {
+      const pulse = (Math.sin(frame * 0.04) + 1) / 2;
+      ctx.beginPath(); ctx.arc(x, y, n.r + 7 * pulse, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(58,58,60,${0.12*(1-pulse)})`; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    if (n.id === 22) {
+      const pulse2 = (Math.sin(frame * 0.04 + 2) + 1) / 2;
+      ctx.beginPath(); ctx.arc(x, y, n.r + 7 * pulse2, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(0,122,255,${0.18*(1-pulse2)})`; ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(x, y, n.r, 0, Math.PI*2);
+    ctx.fillStyle = n.fill; ctx.fill();
+    ctx.fillStyle = n.tc;
+    const fs = Math.max(7, n.r * 0.44);
+    ctx.font = `500 ${fs}px Inter, sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const lines = n.label.split('\n');
+    lines.forEach((l, i) => ctx.fillText(l, x, y + (i - (lines.length-1)/2) * fs * 1.3));
+  });
+
   requestAnimationFrame(loop);
 }
 loop();
