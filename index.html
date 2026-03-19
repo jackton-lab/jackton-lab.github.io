@@ -103,6 +103,17 @@
     .nleg{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--l4);justify-content:center}
     .leg{display:flex;align-items:center;gap:.35rem;font-size:.67rem;color:var(--l2)}
     .ld{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .ld-src  { background: #1c1c1e }
+    .ld-bank { background: #3a3a3c }
+    .ld-dist { background: #636366 }
+    .ld-plat { background: #aeaeb2 }
+    .ld-aud  { background: #007aff }
+    @media(prefers-color-scheme:dark){
+      .ld-src  { background: #e5e5ea }
+      .ld-bank { background: #d1d1d6 }
+      .ld-dist { background: #aeaeb2 }
+      .ld-plat { background: #636366 }
+    }
 
     /* VALUE PROPS */
     .vpg{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.4rem}
@@ -173,6 +184,32 @@
       .ccs{flex-direction:column;align-items:stretch}
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Jackton",
+    "description": "Digital Marketing & Creative Agency spesialis properti. Membangun distribusi konten masif untuk brand awareness dan viralitas yang compounding.",
+    "url": "https://jackton-lab.github.io/",
+    "logo": "https://jackton-lab.github.io/og-image.png",
+    "image": "https://jackton-lab.github.io/og-image.png",
+    "email": "bettercalljack.portal@gmail.com",
+    "telephone": "+6285725143083",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Yogyakarta",
+      "addressCountry": "ID"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Indonesia"
+    },
+    "serviceType": ["Digital Marketing", "Content Distribution", "Brand Awareness", "Property Marketing"],
+    "sameAs": [
+      "https://wa.me/6285725143083"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -223,11 +260,11 @@
     <div class="ncard rv">
       <canvas id="nc"></canvas>
       <div class="nleg">
-        <div class="leg"><div class="ld" style="background:#1c1c1e"></div>Sumber</div>
-        <div class="leg"><div class="ld" style="background:#3a3a3c"></div>Bank Konten</div>
-        <div class="leg"><div class="ld" style="background:#636366"></div>Distributor</div>
-        <div class="leg"><div class="ld" style="background:#aeaeb2"></div>Platform</div>
-        <div class="leg"><div class="ld" style="background:#007aff"></div>Audiens Tersebar</div>
+        <div class="leg"><div class="ld ld-src"></div>Sumber</div>
+        <div class="leg"><div class="ld ld-bank"></div>Bank Konten</div>
+        <div class="leg"><div class="ld ld-dist"></div>Distributor</div>
+        <div class="leg"><div class="ld ld-plat"></div>Platform</div>
+        <div class="leg"><div class="ld ld-aud"></div>Audiens Tersebar</div>
       </div>
     </div>
   </div>
