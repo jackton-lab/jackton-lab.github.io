@@ -3,661 +3,668 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jackton — Attention is the New Asset</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
+  <title>Jackton — Sebar. Dominasi. Compounding.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-    :root {
-      --bg:       #f2f2f7;
-      --bg2:      #ffffff;
-      --surface:  rgba(255,255,255,0.72);
-      --surface2: rgba(255,255,255,0.55);
-      --stroke:   rgba(0,0,0,0.08);
-      --stroke2:  rgba(0,0,0,0.05);
-      --ink:      #000000;
-      --ink2:     #1c1c1e;
-      --ink3:     #3a3a3c;
-      --muted:    #8e8e93;
-      --blue:     #007aff;
-      --blue-bg:  rgba(0,122,255,0.08);
-      --r:        20px;
-      --r-sm:     14px;
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --sys-bg:       #f2f2f7;
+      --sys-bg2:      #ffffff;
+      --sys-fill:     #e5e5ea;
+      --sys-fill2:    #d1d1d6;
+      --sys-sep:      rgba(60,60,67,.18);
+      --sys-sep2:     rgba(60,60,67,.08);
+      --label-pri:    #000000;
+      --label-sec:    rgba(60,60,67,.6);
+      --label-ter:    rgba(60,60,67,.3);
+      --blue:         #007aff;
+      --blue-alt:     #0a84ff;
+      --purple:       #5856d6;
+      --green:        #34c759;
+      --indigo:       #5e5ce6;
+      --glass-light:  rgba(255,255,255,0.72);
+      --glass-dark:   rgba(28,28,30,0.82);
+      --r-xl:  22px;
+      --r-lg:  18px;
+      --r-md:  14px;
+      --r-sm:  10px;
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',-apple-system,'SF Pro Display','SF Pro Text',BlinkMacSystemFont,sans-serif;
+      background:var(--sys-bg);
+      color:var(--label-pri);
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
     }
 
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-      background: var(--bg);
-      color: var(--ink2);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+    /* ── FLOATING ISLAND NAV ── */
+    .nav-island{
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);
+      z-index:400;width:min(calc(100% - 24px), 680px);
     }
-
-    /* ── GLASS MIXIN via utility ── */
-    .glass {
-      background: var(--surface);
-      backdrop-filter: saturate(180%) blur(28px);
-      -webkit-backdrop-filter: saturate(180%) blur(28px);
-      border: 1px solid rgba(255,255,255,0.5);
+    .nav-inner{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:0 18px;height:44px;
+      border-radius:980px;
+      background:rgba(22,22,24,.88);
+      backdrop-filter:saturate(200%) blur(40px);
+      -webkit-backdrop-filter:saturate(200%) blur(40px);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.06) inset,
+        0 8px 32px rgba(0,0,0,.28),
+        0 2px 8px rgba(0,0,0,.16);
     }
-    .glass-dark {
-      background: rgba(28,28,30,0.82);
-      backdrop-filter: saturate(180%) blur(28px);
-      -webkit-backdrop-filter: saturate(180%) blur(28px);
-      border: 1px solid rgba(255,255,255,0.08);
+    .nl{font-size:.9rem;font-weight:700;color:#fff;letter-spacing:-.015em}
+    .nlinks{display:flex;gap:1.5rem;list-style:none}
+    .nlinks a{font-size:.73rem;font-weight:400;color:rgba(255,255,255,.55);text-decoration:none;transition:color .18s}
+    .nlinks a:hover{color:#fff}
+    .ncta{
+      font-size:.72rem;font-weight:600;
+      background:var(--blue);color:#fff;
+      padding:.3rem .9rem;border-radius:980px;
+      text-decoration:none;
+      box-shadow:0 2px 10px rgba(0,122,255,.4);
+      transition:opacity .18s;
     }
-
-    /* ── NAV (Dynamic Island style) ── */
-    .nav-wrap {
-      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
-      z-index: 300; width: calc(100% - 32px); max-width: 720px;
-    }
-    nav {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0 1.2rem; height: 48px; border-radius: 980px;
-      background: rgba(28,28,30,0.78);
-      backdrop-filter: saturate(200%) blur(32px);
-      -webkit-backdrop-filter: saturate(200%) blur(32px);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1px 0 rgba(255,255,255,0.06) inset;
-    }
-    .nav-logo { font-size: 0.95rem; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
-    .nav-links { display: flex; gap: 1.6rem; list-style: none; }
-    .nav-links a { font-size: 0.75rem; color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover { color: #fff; }
-    .nav-cta {
-      font-size: 0.75rem; font-weight: 600;
-      background: var(--blue); color: #fff;
-      padding: 0.35rem 1rem; border-radius: 980px;
-      text-decoration: none; transition: opacity 0.2s;
-    }
-    .nav-cta:hover { opacity: 0.85; }
+    .ncta:hover{opacity:.84}
 
     /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center;
-      padding: 9rem 1.5rem 6rem;
-      position: relative; overflow: hidden;
+    .hero{
+      min-height:100vh;
+      display:flex;flex-direction:column;
+      justify-content:center;align-items:center;
+      text-align:center;
+      padding:9rem 1.5rem 5rem;
+      position:relative;overflow:hidden;
+      background:var(--sys-bg2);
     }
-    .hero-bg {
-      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    /* Noise texture */
+    .hero::after{
+      content:'';position:absolute;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      pointer-events:none;z-index:0;
     }
-    .hero-blob {
-      position: absolute; border-radius: 50%;
-      filter: blur(80px); opacity: 0.35;
+    .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .blob{position:absolute;border-radius:50%;filter:blur(100px)}
+    .b1{width:560px;height:560px;background:radial-gradient(circle,rgba(0,122,255,.22) 0%,transparent 68%);top:-180px;left:-140px}
+    .b2{width:460px;height:460px;background:radial-gradient(circle,rgba(88,86,214,.18) 0%,transparent 68%);bottom:-120px;right:-110px}
+    .b3{width:320px;height:320px;background:radial-gradient(circle,rgba(52,199,89,.12) 0%,transparent 68%);top:42%;right:6%}
+    .hero-content{position:relative;z-index:1}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:.5rem;
+      background:rgba(0,122,255,.08);
+      border:1px solid rgba(0,122,255,.2);
+      border-radius:980px;padding:.3rem 1rem;
+      font-size:.68rem;font-weight:500;
+      color:var(--blue);margin-bottom:1.8rem;
+      opacity:0;animation:fadeUp .6s .1s forwards;
     }
-    .hero-blob-1 { width: 500px; height: 500px; background: radial-gradient(circle, #007aff 0%, transparent 70%); top: -100px; left: -100px; }
-    .hero-blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #5856d6 0%, transparent 70%); bottom: -50px; right: -80px; }
-    .hero-blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, #34c759 0%, transparent 70%); top: 40%; right: 10%; }
+    .badge-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:pulse-dot 2s infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 
-    .hero-inner { position: relative; z-index: 1; }
-    .hero-pill {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: rgba(0,122,255,0.12);
-      border: 1px solid rgba(0,122,255,0.25);
-      border-radius: 980px; padding: 0.35rem 0.9rem;
-      font-size: 0.72rem; font-weight: 500; color: var(--blue);
-      margin-bottom: 2rem;
-      opacity: 0; animation: up 0.6s 0.1s forwards;
+    .hero h1{
+      font-size:clamp(2.6rem,6.8vw,5.6rem);
+      font-weight:700;line-height:1.05;
+      letter-spacing:-.038em;color:var(--label-pri);
+      opacity:0;animation:fadeUp .75s .22s forwards;
     }
-    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-    .hero h1 {
-      font-size: clamp(2.8rem, 7vw, 5.8rem);
-      font-weight: 700; line-height: 1.06; letter-spacing: -0.035em;
-      color: var(--ink);
-      opacity: 0; animation: up 0.7s 0.2s forwards;
+    .hero h1 em{
+      font-family:'Playfair Display',Georgia,serif;
+      font-style:italic;font-weight:700;
+      background:linear-gradient(128deg,var(--blue) 0%,var(--purple) 55%,var(--indigo) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .hero h1 em {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-style: italic; font-weight: 700;
-      background: linear-gradient(135deg, var(--blue) 0%, #5856d6 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hero-sub{
+      margin-top:1.4rem;
+      font-size:clamp(.92rem,1.8vw,1.05rem);
+      font-weight:300;color:var(--label-sec);
+      max-width:420px;line-height:1.7;
+      opacity:0;animation:fadeUp .75s .38s forwards;
     }
-    .hero-sub {
-      margin-top: 1.5rem; font-size: 1.05rem; font-weight: 300;
-      color: var(--muted); max-width: 460px; line-height: 1.68;
-      opacity: 0; animation: up 0.7s 0.35s forwards;
+    .hero-ctas{
+      margin-top:2.2rem;display:flex;gap:.6rem;
+      flex-wrap:wrap;justify-content:center;
+      opacity:0;animation:fadeUp .75s .52s forwards;
     }
-    .hero-actions {
-      margin-top: 2.5rem; display: flex; gap: 0.75rem;
-      flex-wrap: wrap; justify-content: center;
-      opacity: 0; animation: up 0.7s 0.5s forwards;
+    .btn{
+      display:inline-flex;align-items:center;
+      font-size:.82rem;font-weight:600;
+      text-decoration:none;padding:.68rem 1.6rem;
+      border-radius:980px;
+      transition:all .18s ease;
+      letter-spacing:-.01em;
     }
-    .btn {
-      display: inline-flex; align-items: center;
-      font-size: 0.85rem; font-weight: 600; text-decoration: none;
-      padding: 0.75rem 1.8rem; border-radius: 980px;
-      transition: opacity 0.2s, transform 0.2s;
+    .btn:active{transform:scale(.97)}
+    .btn-primary{
+      background:var(--blue);color:#fff;
+      box-shadow:0 4px 18px rgba(0,122,255,.38),0 1px 0 rgba(255,255,255,.2) inset;
     }
-    .btn:hover { opacity: 0.82; transform: translateY(-1px); }
-    .btn-blue { background: var(--blue); color: #fff; box-shadow: 0 4px 20px rgba(0,122,255,0.35); }
-    .btn-glass {
-      background: var(--surface); color: var(--ink2);
-      backdrop-filter: blur(20px); border: 1px solid var(--stroke);
+    .btn-primary:hover{box-shadow:0 6px 24px rgba(0,122,255,.48);transform:translateY(-1px)}
+    .btn-secondary{
+      background:var(--glass-light);color:var(--label-pri);
+      border:1px solid var(--sys-sep);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      box-shadow:0 1px 4px rgba(0,0,0,.06),0 1px 0 rgba(255,255,255,.6) inset;
     }
+    .btn-secondary:hover{background:var(--sys-fill);transform:translateY(-1px)}
+    .hero-scroll{
+      margin-top:3.5rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;
+      opacity:0;animation:fadeUp .7s .85s forwards;
+    }
+    .scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,var(--label-pri),transparent)}
+    .scroll-txt{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--label-ter)}
 
-    /* ── SHARED ── */
-    section { padding: 5rem 1.5rem; }
-    .container { max-width: 960px; margin: 0 auto; }
-    .label {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--blue); margin-bottom: 0.9rem;
+    /* ── SECTION SHARED ── */
+    section{padding:5.5rem 1.5rem}
+    .wrap{max-width:960px;margin:0 auto}
+    .chip{
+      display:inline-flex;align-items:center;gap:.35rem;
+      font-size:.64rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--blue);margin-bottom:.85rem;
     }
-    .label::before { content: ''; width: 16px; height: 1.5px; background: var(--blue); border-radius: 2px; }
-    h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700;
-      letter-spacing: -0.03em; line-height: 1.1; color: var(--ink);
-    }
-    h2 em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
-    .section-sub {
-      margin-top: 0.8rem; font-size: 0.93rem; font-weight: 300;
-      color: var(--muted); max-width: 440px; line-height: 1.7;
-    }
+    .chip::before{content:'';width:12px;height:1.5px;background:var(--blue);border-radius:1px}
+    h2{font-size:clamp(1.8rem,3.4vw,2.55rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;color:var(--label-pri)}
+    h2 em{font-family:'Playfair Display',serif;font-style:italic}
+    .body-copy{margin-top:.7rem;font-size:.9rem;font-weight:300;color:var(--label-sec);max-width:400px;line-height:1.72}
 
     /* ── STATEMENT ── */
-    .statement {
-      background: var(--ink); padding: 7rem 1.5rem; text-align: center;
-      position: relative; overflow: hidden;
+    .stmt{
+      background:var(--label-pri);
+      padding:7rem 1.5rem;text-align:center;
+      position:relative;overflow:hidden;
     }
-    .statement::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(0,122,255,0.15) 0%, transparent 65%);
+    .stmt-glow{
+      position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 55%,rgba(0,122,255,.14) 0%,transparent 62%);
+      pointer-events:none;
     }
-    .statement p {
-      position: relative; z-index: 1;
-      font-size: clamp(1.3rem, 3.2vw, 2.2rem); font-weight: 300;
-      color: rgba(255,255,255,0.42); line-height: 1.5;
-      letter-spacing: -0.02em; max-width: 680px; margin: 0 auto;
+    .stmt p{
+      position:relative;z-index:1;
+      font-size:clamp(1.2rem,2.9vw,2rem);
+      font-weight:300;color:rgba(255,255,255,.38);
+      line-height:1.55;letter-spacing:-.02em;
+      max-width:640px;margin:0 auto;
     }
-    .statement p strong { color: #fff; font-weight: 700; }
+    .stmt p strong{color:#fff;font-weight:700}
 
     /* ── NETWORK ── */
-    .network-bg { background: var(--bg); }
-    .network-card {
-      margin-top: 3rem; border-radius: var(--r);
-      overflow: hidden;
-      background: var(--bg2);
-      border: 1px solid var(--stroke);
-      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-      padding: 2rem 1.5rem 1.5rem;
+    .net-wrap{
+      margin-top:2.8rem;
+      border-radius:var(--r-xl);
+      overflow:hidden;
+      background:var(--sys-bg2);
+      border:1px solid var(--sys-sep2);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.8) inset,
+        0 2px 24px rgba(0,0,0,.07),
+        0 1px 4px rgba(0,0,0,.04);
+      padding:2rem 1.5rem 1.5rem;
     }
-    #networkCanvas { width: 100%; display: block; }
-    .network-legend {
-      display: flex; gap: 1.2rem; flex-wrap: wrap;
-      margin-top: 1.5rem; padding-top: 1.2rem;
-      border-top: 1px solid var(--stroke2);
-      justify-content: center;
+    #nc{width:100%;display:block}
+    .net-leg{
+      display:flex;gap:1.2rem;flex-wrap:wrap;
+      margin-top:1.4rem;padding-top:1.2rem;
+      border-top:1px solid var(--sys-sep2);
+      justify-content:center;
     }
-    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--muted); }
-    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .leg{display:flex;align-items:center;gap:.38rem;font-size:.68rem;color:var(--label-sec);font-weight:400}
+    .ld{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-    /* ── MASALAH ── */
-    .problems-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 2.5rem; }
-    .pcard {
-      background: var(--bg2); border-radius: var(--r-sm);
-      padding: 1.5rem; border: 1px solid var(--stroke);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
-      transition: box-shadow 0.3s, transform 0.3s;
+    /* ── VALUE PROPS ── */
+    .vp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.4rem}
+    .vp{
+      background:var(--sys-bg2);
+      border-radius:var(--r-lg);padding:1.6rem;
+      border:1px solid var(--sys-sep2);
+      box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 8px rgba(0,0,0,.04);
+      transition:box-shadow .25s,transform .25s;
     }
-    .pcard:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .pcard-num { font-size: 0.62rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.6rem; }
-    .pcard h3 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; line-height: 1.3; }
-    .pcard p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .vp:hover{box-shadow:0 8px 30px rgba(0,0,0,.09),0 1px 0 rgba(255,255,255,.9) inset;transform:translateY(-2px)}
+    .vp-ico{
+      width:38px;height:38px;border-radius:11px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.1rem;margin-bottom:1rem;
+      box-shadow:0 1px 0 rgba(255,255,255,.6) inset;
+    }
+    .ico-blue{background:rgba(0,122,255,.1)}
+    .ico-purple{background:rgba(88,86,214,.1)}
+    .ico-green{background:rgba(52,199,89,.1)}
+    .vp-n{font-size:.58rem;font-weight:600;color:var(--label-ter);letter-spacing:.1em;margin-bottom:.3rem}
+    .vp h3{font-size:.88rem;font-weight:600;color:var(--label-pri);margin-bottom:.35rem;line-height:1.3}
+    .vp p{font-size:.77rem;color:var(--label-sec);line-height:1.62}
 
-    /* ── PILAR ── */
-    .pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.5rem; }
-    .pilar {
-      background: var(--bg2); border-radius: var(--r-sm);
-      padding: 1.6rem; border: 1px solid var(--stroke);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
-      transition: box-shadow 0.3s, transform 0.3s;
+    /* ── COMPARE ── */
+    .cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.4rem}
+    .cmp{
+      border-radius:var(--r-lg);padding:1.5rem;
+      border:1px solid var(--sys-sep2);
+      background:var(--sys-bg2);
+      box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 8px rgba(0,0,0,.04);
     }
-    .pilar:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .pilar-icon {
-      width: 34px; height: 34px; border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem; font-size: 1rem;
+    .cmp.win{
+      background:var(--label-pri);
+      border-color:transparent;
+      box-shadow:0 12px 40px rgba(0,0,0,.22),0 2px 8px rgba(0,0,0,.12),0 0 0 .5px rgba(255,255,255,.08) inset;
     }
-    .pilar-icon.blue { background: var(--blue-bg); }
-    .pilar-icon.purple { background: rgba(88,86,214,0.1); }
-    .pilar-icon.green { background: rgba(52,199,89,0.1); }
-    .pilar-num { font-size: 0.62rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
-    .pilar h3 { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
-    .pilar-plat { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.8rem; }
-    .pilar ul { list-style: none; }
-    .pilar ul li { font-size: 0.78rem; color: var(--muted); line-height: 1.7; display: flex; gap: 0.4rem; }
-    .pilar ul li::before { content: '·'; color: var(--blue); flex-shrink: 0; font-size: 1rem; line-height: 1.4; }
-
-    /* ── COMPARE — card stacked, mobile-friendly ── */
-    .compare-section { background: var(--bg); }
-    .compare-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.5rem; }
-    .compare-card {
-      border-radius: var(--r-sm); padding: 1.5rem;
-      border: 1px solid var(--stroke); background: var(--bg2);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+    .cmp-lbl{font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--label-ter);margin-bottom:.95rem}
+    .cmp.win .cmp-lbl{color:rgba(255,255,255,.35)}
+    .cmp-badge{display:inline-block;background:var(--blue);color:#fff;font-size:.58rem;font-weight:700;padding:.16rem .48rem;border-radius:980px;margin-bottom:.3rem}
+    .cmp-name{font-size:.95rem;font-weight:700;color:var(--label-pri);margin-bottom:.95rem;line-height:1.2}
+    .cmp.win .cmp-name{color:#fff}
+    .crow{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.44rem 0;border-bottom:1px solid var(--sys-sep2);
+      font-size:.74rem;color:var(--label-sec);gap:.4rem;
     }
-    .compare-card.featured {
-      background: var(--ink); border-color: transparent;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    }
-    .compare-card-title {
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem;
-    }
-    .compare-card.featured .compare-card-title { color: rgba(255,255,255,0.5); }
-    .compare-badge {
-      display: inline-block; background: var(--blue);
-      color: #fff; font-size: 0.62rem; font-weight: 600;
-      padding: 0.2rem 0.55rem; border-radius: 980px; margin-bottom: 0.4rem;
-    }
-    .compare-name {
-      font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 1.2rem;
-    }
-    .compare-card.featured .compare-name { color: #fff; }
-    .compare-row {
-      display: flex; align-items: flex-start; gap: 0.5rem;
-      padding: 0.55rem 0; border-bottom: 1px solid var(--stroke2);
-      font-size: 0.78rem; color: var(--muted);
-    }
-    .compare-card.featured .compare-row { border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
-    .compare-row:last-child { border-bottom: none; }
-    .compare-row .cr-label { flex: 1; }
-    .cr-val { font-weight: 500; color: var(--ink3); white-space: nowrap; }
-    .compare-card.featured .cr-val { color: #fff; }
-    .cr-check { color: var(--blue); font-weight: 700; }
-
-    /* ── STEPS ── */
-    .steps-wrap { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; background: var(--bg2); border-radius: var(--r); border: 1px solid var(--stroke); overflow: hidden; box-shadow: 0 1px 12px rgba(0,0,0,0.05); }
-    .step {
-      display: flex; gap: 1.5rem; padding: 1.5rem 1.8rem;
-      border-bottom: 1px solid var(--stroke2);
-      transition: background 0.2s; cursor: default;
-    }
-    .step:last-child { border-bottom: none; }
-    .step:hover { background: var(--bg); }
-    .step-n {
-      min-width: 28px; height: 28px; border-radius: 50%;
-      background: var(--blue-bg); color: var(--blue);
-      font-size: 0.7rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 0.1rem;
-    }
-    .step h4 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
-    .step p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+    .cmp.win .crow{border-color:rgba(255,255,255,.07);color:rgba(255,255,255,.38)}
+    .crow:last-child{border-bottom:none}
+    .ck{color:var(--blue-alt);font-weight:700}
+    .cv{font-weight:500;color:rgba(60,60,67,.75);white-space:nowrap}
+    .cmp.win .cv{color:rgba(255,255,255,.82)}
 
     /* ── STATS ── */
-    .stats-section { background: var(--ink); padding: 5rem 1.5rem; position: relative; overflow: hidden; }
-    .stats-section::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(0,122,255,0.12) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(88,86,214,0.1) 0%, transparent 50%);
+    .stats-s{background:var(--label-pri);padding:5rem 1.5rem;position:relative;overflow:hidden}
+    .stats-s::before{
+      content:'';position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 20% 50%,rgba(0,122,255,.13) 0%,transparent 55%),
+        radial-gradient(ellipse at 85% 25%,rgba(88,86,214,.1) 0%,transparent 50%);
+      pointer-events:none;
     }
-    .stats-section .label { color: rgba(255,255,255,0.4); position: relative; z-index: 1; }
-    .stats-section h2 { color: #fff; position: relative; z-index: 1; }
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 1px; background: rgba(255,255,255,0.06);
-      border-radius: var(--r); overflow: hidden; margin-top: 2.5rem;
-      position: relative; z-index: 1;
+    .stats-s .chip{color:rgba(255,255,255,.35);position:relative;z-index:1}
+    .stats-s .chip::before{background:rgba(255,255,255,.25)}
+    .stats-s h2{color:#fff;position:relative;z-index:1}
+    .sg{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:1px;background:rgba(255,255,255,.07);
+      border-radius:var(--r-lg);overflow:hidden;
+      margin-top:2.4rem;position:relative;z-index:1;
+      border:1px solid rgba(255,255,255,.06);
     }
-    .stat { background: rgba(255,255,255,0.03); padding: 2.5rem 1.5rem; text-align: center; }
-    .stat-val {
-      font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
-      color: #fff; letter-spacing: -0.03em; line-height: 1;
+    .sc{background:rgba(255,255,255,.025);padding:2.5rem 1.5rem;text-align:center}
+    .sv{
+      font-size:clamp(2rem,5vw,3.2rem);font-weight:700;
+      letter-spacing:-.04em;line-height:1;
+      background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.7) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .stat-val span { background: linear-gradient(135deg,#007aff,#5856d6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 0.5rem; line-height: 1.5; }
+    .sl{font-size:.71rem;color:rgba(255,255,255,.3);margin-top:.48rem;line-height:1.5}
 
     /* ── CONTACT ── */
-    .contact-section { text-align: center; padding: 7rem 1.5rem; }
-    .contact-section h2 { margin: 0 auto; }
-    .contact-section .section-sub { margin: 0.8rem auto 0; }
-    .contact-cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
-    .contact-card {
-      background: var(--bg2); border-radius: var(--r-sm);
-      padding: 1.6rem 2.2rem; text-decoration: none; color: var(--ink2);
-      border: 1px solid var(--stroke);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
-      transition: box-shadow 0.2s, transform 0.2s;
-      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
-      min-width: 200px;
+    .ct-s{text-align:center;padding:7rem 1.5rem;background:var(--sys-bg2);position:relative;overflow:hidden}
+    .ct-s::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,122,255,.06) 0%,transparent 60%);pointer-events:none}
+    .ct-s h2,.ct-s .body-copy{margin-left:auto;margin-right:auto;position:relative;z-index:1}
+    .ct-cards{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;position:relative;z-index:1}
+    .cc{
+      background:var(--sys-bg);
+      border-radius:var(--r-lg);padding:1.6rem 2rem;
+      text-decoration:none;color:var(--label-pri);
+      border:1px solid var(--sys-sep2);
+      box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 8px rgba(0,0,0,.05);
+      transition:box-shadow .2s,transform .2s;
+      display:flex;flex-direction:column;align-items:center;gap:.32rem;min-width:196px;
     }
-    .contact-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.1); transform: translateY(-2px); }
-    .c-icon { font-size: 1.3rem; }
-    .c-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-    .c-val { font-size: 0.82rem; font-weight: 600; color: var(--ink); }
+    .cc:hover{box-shadow:0 8px 28px rgba(0,0,0,.1),0 1px 0 rgba(255,255,255,.9) inset;transform:translateY(-2px)}
+    .cc-ico{font-size:1.25rem}
+    .cc-lbl{font-size:.6rem;color:var(--label-ter);text-transform:uppercase;letter-spacing:.1em}
+    .cc-v{font-size:.8rem;font-weight:600;color:var(--label-pri)}
 
-    /* ── FOOTER ── */
-    footer {
-      padding: 1.5rem 2rem; border-top: 1px solid var(--stroke);
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 0.8rem; background: var(--bg2);
+    footer{
+      padding:1.4rem 2rem;border-top:1px solid var(--sys-sep2);
+      display:flex;justify-content:space-between;align-items:center;
+      flex-wrap:wrap;gap:.8rem;background:var(--sys-bg2);
     }
-    .f-logo { font-size: 0.88rem; font-weight: 700; color: var(--ink); }
-    footer p { font-size: 0.7rem; color: var(--muted); }
+    .fl{font-size:.85rem;font-weight:700;color:var(--label-pri)}
+    footer p{font-size:.66rem;color:var(--label-ter)}
 
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
-    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(18px);transition:opacity .58s ease,transform .58s ease}
+    .rv.on{opacity:1;transform:none}
+    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
 
-    @keyframes up { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: none; } }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 680px) {
-      .nav-links { display: none; }
-      .nav-wrap { top: 12px; width: calc(100% - 24px); }
-      section { padding: 4rem 1.2rem; }
-      .statement, .stats-section { padding: 5rem 1.2rem; }
-      .contact-section { padding: 5rem 1.2rem; }
-      .problems-grid { grid-template-columns: 1fr; }
-      .pillars-grid { grid-template-columns: 1fr; }
-      .compare-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr; }
-      .step { padding: 1.2rem; gap: 1rem; }
-      footer { flex-direction: column; text-align: center; }
-      .contact-cards { flex-direction: column; align-items: stretch; }
+    @media(max-width:680px){
+      .nlinks{display:none}
+      .nav-island{top:10px;width:calc(100% - 18px)}
+      section{padding:4rem 1.1rem}
+      .stmt,.stats-s,.ct-s{padding:4.5rem 1.1rem}
+      .vp-grid,.cmp-grid{grid-template-columns:1fr}
+      .sg{grid-template-columns:1fr}
+      footer{flex-direction:column;text-align:center}
+      .ct-cards{flex-direction:column;align-items:stretch}
     }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
-<div class="nav-wrap">
-  <nav>
-    <div class="nav-logo">Jackton</div>
-    <ul class="nav-links">
+<div class="nav-island">
+  <div class="nav-inner">
+    <div class="nl">Jackton</div>
+    <ul class="nlinks">
       <li><a href="#sistem">Sistem</a></li>
-      <li><a href="#cara-kerja">Cara Kerja</a></li>
+      <li><a href="#keunggulan">Keunggulan</a></li>
       <li><a href="#kontak">Kontak</a></li>
     </ul>
-    <a href="#kontak" class="nav-cta">Hubungi Kami</a>
-  </nav>
+    <a href="#kontak" class="ncta">Hubungi Kami</a>
+  </div>
 </div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg">
-    <div class="hero-blob hero-blob-1"></div>
-    <div class="hero-blob hero-blob-2"></div>
-    <div class="hero-blob hero-blob-3"></div>
-  </div>
-  <div class="hero-inner">
-    <div class="hero-pill"><span class="pill-dot"></span>Digital Marketing & Creative Agency — Properti</div>
-    <h1>Attention adalah<br><em>aset digital</em><br>yang paling berharga.</h1>
-    <p class="hero-sub">Jackton membantu pelaku industri properti membangun perhatian publik sebagai aset jangka panjang — bukan iklan yang mati saat budget habis.</p>
-    <div class="hero-actions">
-      <a href="#kontak" class="btn btn-blue">Mulai Bersama Jackton</a>
-      <a href="#sistem" class="btn btn-glass">Lihat Sistem ↓</a>
+  <div class="hero-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Digital Marketing & Creative Agency — Properti</div>
+    <h1>Satu brand.<br><em>Tersebar di mana-mana.</em></h1>
+    <p class="hero-sub">Jackton mendistribusikan nama brand properti kamu ke ribuan titik di seluruh platform — membangun ketenaran yang terus tumbuh sendiri.</p>
+    <div class="hero-ctas">
+      <a href="#kontak" class="btn btn-primary">Mulai Bersama Jackton</a>
+      <a href="#sistem" class="btn btn-secondary">Lihat Sistem ↓</a>
     </div>
+    <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-txt">Scroll</span></div>
   </div>
 </section>
 
 <!-- STATEMENT -->
-<div class="statement">
-  <p>Marketing properti konvensional hanya mengejar <strong>leads</strong> — tapi tidak pernah membangun <strong>kepercayaan</strong> sebelum pertemuan pertama.</p>
+<div class="stmt">
+  <div class="stmt-glow"></div>
+  <p>Brand properti yang <strong>tersebar di mana-mana</strong><br>tidak perlu mengejar calon pembeli —<br>calon pembeli yang <strong>datang sendiri.</strong></p>
 </div>
 
 <!-- NETWORK -->
-<section class="network-bg" id="sistem">
-  <div class="container">
-    <div class="label reveal">Ekosistem Distribusi</div>
-    <h2 class="reveal">Dari 3 sumber — meledak<br>ke ribuan titik.</h2>
-    <p class="section-sub reveal">Konten dikumpulkan di bank konten terpusat, lalu didistribusikan oleh puluhan clipper ke ratusan akun TikTok & Reels setiap hari.</p>
-    <div class="network-card reveal">
-      <canvas id="networkCanvas"></canvas>
-      <div class="network-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#1c1c1e"></div>Sumber Konten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#3a3a3c"></div>Bank Konten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#636366"></div>Clipper</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#aeaeb2"></div>TikTok / Reels</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#007aff"></div>Audiens</div>
+<section style="background:var(--sys-bg2)" id="sistem">
+  <div class="wrap">
+    <div class="chip rv">Ekosistem Distribusi</div>
+    <h2 class="rv">Dari satu sumber —<br><em>menyebar tanpa batas.</em></h2>
+    <p class="body-copy rv">Jackton membangun jaringan distribusi konten yang bergerak agresif ke seluruh penjuru platform — setiap hari, tanpa henti.</p>
+    <div class="net-wrap rv">
+      <canvas id="nc"></canvas>
+      <div class="net-leg">
+        <div class="leg"><div class="ld" style="background:#1c1c1e"></div>Sumber</div>
+        <div class="leg"><div class="ld" style="background:#3a3a3c"></div>Bank Konten</div>
+        <div class="leg"><div class="ld" style="background:#636366"></div>Distributor</div>
+        <div class="leg"><div class="ld" style="background:#aeaeb2"></div>Platform</div>
+        <div class="leg"><div class="ld" style="background:#007aff"></div>Audiens Tersebar</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PILAR -->
-<section style="background:var(--bg2)">
-  <div class="container">
-    <div class="label reveal">Tiga Pilar</div>
-    <h2 class="reveal">Sistem yang bekerja<br>saat kamu tidur.</h2>
-    <div class="pillars-grid">
-      <div class="pilar reveal">
-        <div class="pilar-icon blue">📱</div>
-        <div class="pilar-num">PILAR 01</div>
-        <h3>Prestige Channel</h3>
-        <div class="pilar-plat">Brand & Trust</div>
-        <ul>
-          <li>Identitas brand aspirasional</li>
-          <li>Konten edukasi & lifestyle premium</li>
-          <li>Jadi referensi pertama calon pembeli</li>
-        </ul>
+<!-- VALUE -->
+<section style="background:var(--sys-bg)">
+  <div class="wrap">
+    <div class="chip rv">Apa yang Kami Bangun</div>
+    <h2 class="rv">Ketenaran brand yang<br><em>compounding.</em></h2>
+    <div class="vp-grid">
+      <div class="vp rv">
+        <div class="vp-ico ico-blue">📡</div>
+        <div class="vp-n">01</div>
+        <h3>Distribusi Masif</h3>
+        <p>Nama brand properti kamu tersebar ke ribuan titik setiap hari — melampaui jangkauan iklan biasa.</p>
       </div>
-      <div class="pilar reveal d1">
-        <div class="pilar-icon purple">⚡</div>
-        <div class="pilar-num">PILAR 02</div>
-        <h3>Viral Engine</h3>
-        <div class="pilar-plat">Distribusi & Volume</div>
-        <ul>
-          <li>Puluhan clipper, multi-akun & multi-device</li>
-          <li>1–10 konten per akun per hari</li>
-          <li>Hanya TikTok & Reels</li>
-        </ul>
+      <div class="vp rv d1">
+        <div class="vp-ico ico-purple">🧲</div>
+        <div class="vp-n">02</div>
+        <h3>Brand Awareness yang Dalam</h3>
+        <p>Calon pembeli mengenal brand kamu jauh sebelum pertemuan pertama — datang hangat, bukan cold.</p>
       </div>
-      <div class="pilar reveal d2">
-        <div class="pilar-icon green">🌐</div>
-        <div class="pilar-num">PILAR 03</div>
-        <h3>Community Scale</h3>
-        <div class="pilar-plat">UGC & Performa</div>
-        <ul>
-          <li>UGC, endorsement & talent eksternal</li>
-          <li>Komisi berbasis views — bayar performa</li>
-          <li>Skala tanpa biaya overhead linear</li>
-        </ul>
+      <div class="vp rv d2">
+        <div class="vp-ico ico-green">♾️</div>
+        <div class="vp-n">03</div>
+        <h3>Momentum yang Terus Tumbuh</h3>
+        <p>Semakin banyak konten tersebar, semakin dikenal brand kamu. Efek compounding yang tidak bisa dibeli dengan satu kali iklan.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- COMPARE -->
-<section class="compare-section">
-  <div class="container">
-    <div class="label reveal">Perbandingan</div>
-    <h2 class="reveal">Kenapa Jackton<br>berbeda.</h2>
-    <div class="compare-grid">
-      <div class="compare-card reveal">
-        <div class="compare-card-title">Media Konvensional</div>
-        <div class="compare-name">Billboard & Cetak</div>
-        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val">Hilang</span></div>
-        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val">Tidak ada</span></div>
-        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val">Tidak ada</span></div>
-        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val">Cold</span></div>
-        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val">Sulit</span></div>
+<section style="background:var(--sys-bg2)" id="keunggulan">
+  <div class="wrap">
+    <div class="chip rv">Perbandingan</div>
+    <h2 class="rv">Kenapa Jackton<br>berbeda.</h2>
+    <div class="cmp-grid">
+      <div class="cmp rv">
+        <div class="cmp-lbl">Konvensional</div>
+        <div class="cmp-name">Billboard & Cetak</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv">Hilang</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv">Tidak ada</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv">✗</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv">Cold</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv">Sulit</span></div>
       </div>
-      <div class="compare-card reveal d1">
-        <div class="compare-card-title">Digital Ads</div>
-        <div class="compare-name">Meta / Google Ads</div>
-        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val">Hilang</span></div>
-        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val">Tidak ada</span></div>
-        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val">Tidak ada</span></div>
-        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val">Sebagian aware</span></div>
-        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val">Sebagian</span></div>
+      <div class="cmp rv d1">
+        <div class="cmp-lbl">Digital Ads</div>
+        <div class="cmp-name">Meta / Google</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv">Hilang</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv">Tidak ada</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv">✗</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv">Sebagian</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv">Sebagian</span></div>
       </div>
-      <div class="compare-card featured reveal d2">
-        <div class="compare-card-title">Jackton</div>
-        <div class="compare-badge">Rekomendasi</div>
-        <div class="compare-name">Evergreen Network</div>
-        <div class="compare-row"><span class="cr-label">Setelah berhenti</span><span class="cr-val"><span class="cr-check">✓</span> Tetap aktif</span></div>
-        <div class="compare-row"><span class="cr-label">Aset tersisa</span><span class="cr-val"><span class="cr-check">✓</span> Ribuan konten</span></div>
-        <div class="compare-row"><span class="cr-label">Compounding</span><span class="cr-val"><span class="cr-check">✓</span> Tumbuh tiap bulan</span></div>
-        <div class="compare-row"><span class="cr-label">Leads masuk</span><span class="cr-val"><span class="cr-check">✓</span> Warm</span></div>
-        <div class="compare-row"><span class="cr-label">Terukur</span><span class="cr-val"><span class="cr-check">✓</span> Transparan harian</span></div>
+      <div class="cmp win rv d2">
+        <div class="cmp-lbl">Jackton</div>
+        <div class="cmp-badge">Rekomendasi</div>
+        <div class="cmp-name">Evergreen Network</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv"><span class="ck">✓</span> Tetap aktif</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv"><span class="ck">✓</span> Ribuan konten</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv"><span class="ck">✓</span> Tumbuh tiap bulan</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv"><span class="ck">✓</span> Warm</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv"><span class="ck">✓</span> Harian</span></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- CARA KERJA -->
-<section style="background:var(--bg2)" id="cara-kerja">
-  <div class="container">
-    <div class="label reveal">Cara Kerja</div>
-    <h2 class="reveal">Lima langkah yang<br>mengubah konten jadi aset.</h2>
-    <div class="steps-wrap reveal">
-      <div class="step"><div class="step-n">01</div><div><h4>3 Sumber Konten</h4><p>IG/TikTok brand, mentahan internal di Drive, dan video dari UGC / talent / endorsement.</p></div></div>
-      <div class="step"><div class="step-n">02</div><div><h4>Bank Konten Terpusat</h4><p>Semua mentahan masuk ke Google Drive — sumber tunggal yang bisa diakses seluruh jaringan clipper.</p></div></div>
-      <div class="step"><div class="step-n">03</div><div><h4>Puluhan Clipper Bekerja</h4><p>Setiap clipper punya 2–4 akun (atau lebih), multi-device, posting 1–10 konten per akun per hari.</p></div></div>
-      <div class="step"><div class="step-n">04</div><div><h4>Ledakan di TikTok & Reels</h4><p>Distribusi difokuskan ke algoritma organik terkuat — TikTok video dan Instagram Reels.</p></div></div>
-      <div class="step"><div class="step-n">05</div><div><h4>Leads Datang Warm</h4><p>Calon pembeli yang terekspos konten berulang mencari kontak sendiri — datang ke sales sudah mengenal brand.</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
-<section class="stats-section">
-  <div class="container">
-    <div class="label reveal">Output</div>
-    <h2 class="reveal">Angka yang berbicara.</h2>
-    <div class="stats-grid">
-      <div class="stat reveal"><div class="stat-val"><span>390+</span></div><div class="stat-label">Konten aktif per bulan di platform</div></div>
-      <div class="stat reveal d1"><div class="stat-val"><span>5jt+</span></div><div class="stat-label">Estimasi views organik per bulan</div></div>
-      <div class="stat reveal d2"><div class="stat-val"><span>∞</span></div><div class="stat-label">Konten aktif selama platform hidup</div></div>
+<section class="stats-s">
+  <div class="wrap">
+    <div class="chip rv">Output</div>
+    <h2 class="rv" style="color:#fff">Angka yang berbicara.</h2>
+    <div class="sg">
+      <div class="sc rv"><div class="sv">390+</div><div class="sl">Konten aktif per bulan</div></div>
+      <div class="sc rv d1"><div class="sv">5jt+</div><div class="sl">Estimasi views organik / bulan</div></div>
+      <div class="sc rv d2"><div class="sv">∞</div><div class="sl">Aktif selama platform hidup</div></div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="contact-section" id="kontak">
-  <div class="container">
-    <div class="label reveal">Mulai Sekarang</div>
-    <h2 class="reveal">Siap membangun attention<br>sebagai aset?</h2>
-    <p class="section-sub reveal">Ceritakan proyekmu. Jackton bantu rancang sistem yang tepat.</p>
-    <div class="contact-cards">
-      <a href="https://wa.me/6285725143083" class="contact-card reveal" target="_blank">
-        <span class="c-icon">💬</span><span class="c-label">WhatsApp</span><span class="c-val">+62 857-2514-3083</span>
+<section class="ct-s" id="kontak">
+  <div class="wrap">
+    <div class="chip rv">Mulai Sekarang</div>
+    <h2 class="rv">Siap membuat brand kamu<br><em>tersebar di mana-mana?</em></h2>
+    <p class="body-copy rv">Ceritakan proyekmu. Jackton bantu rancang sistem distribusi yang tepat.</p>
+    <div class="ct-cards">
+      <a href="https://wa.me/6285725143083" class="cc rv" target="_blank">
+        <span class="cc-ico">💬</span><span class="cc-lbl">WhatsApp</span><span class="cc-v">+62 857-2514-3083</span>
       </a>
-      <a href="mailto:bettercalljack.portal@gmail.com" class="contact-card reveal d1">
-        <span class="c-icon">✉️</span><span class="c-label">Email</span><span class="c-val">bettercalljack.portal@gmail.com</span>
+      <a href="mailto:bettercalljack.portal@gmail.com" class="cc rv d1">
+        <span class="cc-ico">✉️</span><span class="cc-lbl">Email</span><span class="cc-v">bettercalljack.portal@gmail.com</span>
       </a>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="f-logo">Jackton</div>
+  <div class="fl">Jackton</div>
   <p>Digital Marketing & Creative Agency — Spesialis Properti</p>
   <p>© 2026 Jackton</p>
 </footer>
 
 <script>
-// SCROLL REVEAL
-const els = document.querySelectorAll('.reveal');
-new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.08 })
-  .observe ? document.querySelectorAll('.reveal').forEach(el => new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('visible')), { threshold: 0.08 }).observe(el)) : els.forEach(el => el.classList.add('visible'));
+// REVEAL
+document.querySelectorAll('.rv').forEach(el =>
+  new IntersectionObserver(([e])=>e.isIntersecting&&e.target.classList.add('on'),{threshold:.07}).observe(el)
+);
 
-// NETWORK DIAGRAM
-const canvas = document.getElementById('networkCanvas');
+// ── NETWORK: OUTWARD EXPLOSION ──
+// Alur: 3 sumber → bank konten (center) → puluhan distributor → meledak ke luar (banyak titik audiens tersebar)
+const canvas = document.getElementById('nc');
 const ctx = canvas.getContext('2d');
-function setSize() {
+
+function resize(){
   const w = canvas.parentElement.clientWidth - 32;
-  canvas.width = w; canvas.height = Math.round(Math.min(460, w * 0.52));
+  canvas.width  = w;
+  canvas.height = Math.round(Math.min(480, w * 0.52));
 }
-setSize(); window.addEventListener('resize', setSize);
-const W = () => canvas.width, H = () => canvas.height;
+resize();
+window.addEventListener('resize', resize);
+
+const W=()=>canvas.width, H=()=>canvas.height;
+
+// Nodes — outward spread layout
+// Layer 0: 3 sources (top center cluster)
+// Layer 1: bank konten (center)
+// Layer 2: 8 distributors (ring around center)
+// Layer 3: 16 platform nodes scattered outward to edges
+// NO single audience node — instead particles explode outward and fade
 
 const NODES = [
-  { id:0,  label:'IG/TikTok\nBrand',    rx:0.18, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
-  { id:1,  label:'Mentahan\nInternal',  rx:0.50, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
-  { id:2,  label:'UGC &\nTalent',       rx:0.82, ry:0.07, r:17, fill:'#1c1c1e', tc:'#fff' },
-  { id:3,  label:'📁 Bank Konten\nTerpusat', rx:0.50, ry:0.27, r:25, fill:'#3a3a3c', tc:'#fff' },
-  { id:4,  label:'Clipper\n×2–4 akun',  rx:0.08, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:5,  label:'Clipper\n×2–4 akun',  rx:0.22, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:6,  label:'Clipper\n×2–4 akun',  rx:0.36, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:7,  label:'Clipper\n×2–4 akun',  rx:0.50, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:8,  label:'Clipper\n×2–4 akun',  rx:0.64, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:9,  label:'Clipper\n×2–4 akun',  rx:0.78, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:10, label:'+ Puluhan\nClipper',   rx:0.92, ry:0.52, r:12, fill:'#636366', tc:'#fff' },
-  { id:11, label:'TikTok', rx:0.05,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:12, label:'Reels',  rx:0.14,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:13, label:'TikTok', rx:0.23,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:14, label:'Reels',  rx:0.32,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:15, label:'TikTok', rx:0.41,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:16, label:'Reels',  rx:0.50,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:17, label:'TikTok', rx:0.59,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:18, label:'Reels',  rx:0.68,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:19, label:'TikTok', rx:0.77,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:20, label:'Reels',  rx:0.86,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:21, label:'TikTok', rx:0.95,  ry:0.78, r:9, fill:'#aeaeb2', tc:'#1c1c1e' },
-  { id:22, label:'👥 Audiens Properti', rx:0.50, ry:0.95, r:22, fill:'#007aff', tc:'#fff' },
+  // sources — tight cluster top
+  {id:0, rx:.38, ry:.10, r:14, type:'src',  fill:'#1c1c1e'},
+  {id:1, rx:.50, ry:.07, r:14, type:'src',  fill:'#1c1c1e'},
+  {id:2, rx:.62, ry:.10, r:14, type:'src',  fill:'#1c1c1e'},
+  // bank — center
+  {id:3, rx:.50, ry:.32, r:22, type:'bank', fill:'#3a3a3c'},
+  // distributors — ring
+  {id:4,  rx:.22, ry:.30, r:11, type:'dist', fill:'#636366'},
+  {id:5,  rx:.30, ry:.52, r:11, type:'dist', fill:'#636366'},
+  {id:6,  rx:.42, ry:.58, r:11, type:'dist', fill:'#636366'},
+  {id:7,  rx:.58, ry:.58, r:11, type:'dist', fill:'#636366'},
+  {id:8,  rx:.70, ry:.52, r:11, type:'dist', fill:'#636366'},
+  {id:9,  rx:.78, ry:.30, r:11, type:'dist', fill:'#636366'},
+  {id:10, rx:.36, ry:.22, r:11, type:'dist', fill:'#636366'},
+  {id:11, rx:.64, ry:.22, r:11, type:'dist', fill:'#636366'},
+  // platforms — scattered outward
+  {id:12, rx:.05,  ry:.18, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:13, rx:.10,  ry:.42, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:14, rx:.08,  ry:.65, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:15, rx:.18,  ry:.80, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:16, rx:.32,  ry:.88, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:17, rx:.48,  ry:.90, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:18, rx:.62,  ry:.88, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:19, rx:.76,  ry:.80, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:20, rx:.88,  ry:.65, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:21, rx:.92,  ry:.42, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:22, rx:.90,  ry:.18, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:23, rx:.72,  ry:.08, r:8, type:'plat', fill:'#aeaeb2'},
+  {id:24, rx:.28,  ry:.08, r:8, type:'plat', fill:'#aeaeb2'},
 ];
 
 const EDGES = [
   [0,3],[1,3],[2,3],
-  [3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],
-  [4,11],[4,12],[5,12],[5,13],[6,13],[6,14],[6,15],
-  [7,15],[7,16],[7,17],[8,17],[8,18],[9,18],[9,19],[9,20],[10,20],[10,21],
-  [11,22],[13,22],[15,22],[17,22],[19,22],[21,22],
+  [3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],
+  [4,12],[4,13],[10,12],[10,24],
+  [5,13],[5,14],[5,15],
+  [6,15],[6,16],[6,17],
+  [7,17],[7,18],[7,19],
+  [8,19],[8,20],[8,21],
+  [9,21],[9,22],[11,22],[11,23],
 ];
 
-let particles = [], frame = 0;
-const px = n => n.rx * W(), py = n => n.ry * H();
+// Exploding audience particles — fly outward from platform nodes
+let particles = [];
+let audienceParticles = []; // fly outward from platform nodes, no destination
+let frame = 0;
 
-function loop() {
-  frame++;
-  ctx.clearRect(0, 0, W(), H());
+const px = n => n.rx * W();
+const py = n => n.ry * H();
 
-  EDGES.forEach(([a,b]) => {
-    const na = NODES[a], nb = NODES[b];
-    ctx.beginPath(); ctx.moveTo(px(na), py(na)); ctx.lineTo(px(nb), py(nb));
-    ctx.strokeStyle = 'rgba(0,0,0,0.06)'; ctx.lineWidth = 1; ctx.stroke();
-  });
-
-  if (frame % 5 === 0 && particles.length < 50) {
-    const e = EDGES[Math.floor(Math.random() * EDGES.length)];
-    particles.push({ a: e[0], b: e[1], t: 0, speed: 0.008 + Math.random() * 0.009 });
+// Draw node symbols
+function drawNode(n) {
+  const x=px(n), y=py(n), r=n.r;
+  // Pulse rings
+  if (n.type==='bank') {
+    const p = (Math.sin(frame*.045)+1)/2;
+    ctx.beginPath(); ctx.arc(x,y,r+8*p,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(58,58,60,${.13*(1-p)})`; ctx.lineWidth=1.5; ctx.stroke();
   }
-  particles.forEach(p => { p.t += p.speed; });
-  particles = particles.filter(p => p.t < 1);
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=n.fill; ctx.fill();
+  ctx.fillStyle = n.type==='plat' ? '#1c1c1e' : '#fff';
+  const fs = Math.max(7, r*.52);
+  ctx.font=`600 ${fs}px -apple-system,sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  const sym = {src:'▶', bank:'⊙', dist:'◈', plat:'▲'}[n.type];
+  ctx.fillText(sym, x, y+.5);
+}
 
-  particles.forEach(p => {
-    const na = NODES[p.a], nb = NODES[p.b];
-    const x = px(na) + (px(nb)-px(na)) * p.t;
-    const y = py(na) + (py(nb)-py(na)) * p.t;
-    const isToAudiens = p.b === 22;
-    ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI*2);
-    ctx.fillStyle = isToAudiens ? `rgba(0,122,255,${0.7 - p.t * 0.4})` : `rgba(28,28,30,${0.5 - p.t * 0.2})`;
-    ctx.fill();
+function spawnFlow() {
+  const e = EDGES[Math.floor(Math.random()*EDGES.length)];
+  const na=NODES[e[0]], nb=NODES[e[1]];
+  const hot = na.type==='bank'||na.type==='dist';
+  particles.push({a:e[0],b:e[1],t:0,speed:.010+Math.random()*.012,hot});
+}
+
+function spawnAudience() {
+  // Pick a random platform node and shoot particle outward from it
+  const platIds = NODES.filter(n=>n.type==='plat').map(n=>n.id);
+  const n = NODES[platIds[Math.floor(Math.random()*platIds.length)]];
+  // Direction: outward from center of canvas
+  const cx=W()*.5, cy=H()*.45;
+  const dx=px(n)-cx, dy=py(n)-cy;
+  const len=Math.sqrt(dx*dx+dy*dy)||1;
+  const speed = .8+Math.random()*1.2;
+  audienceParticles.push({
+    x:px(n), y:py(n),
+    vx:(dx/len)*speed*(1+Math.random()),
+    vy:(dy/len)*speed*(1+Math.random()),
+    life:1, decay:.016+Math.random()*.012,
+    r:1.5+Math.random()*1.5,
+  });
+}
+
+function loop(){
+  frame++;
+  ctx.clearRect(0,0,W(),H());
+
+  // Draw edges
+  EDGES.forEach(([a,b])=>{
+    const na=NODES[a], nb=NODES[b];
+    const isMain = na.type==='src'||na.type==='bank';
+    ctx.beginPath(); ctx.moveTo(px(na),py(na)); ctx.lineTo(px(nb),py(nb));
+    ctx.strokeStyle=isMain?'rgba(0,0,0,.09)':'rgba(0,0,0,.04)';
+    ctx.lineWidth=isMain?1.2:.7; ctx.stroke();
   });
 
-  NODES.forEach(n => {
-    const x = px(n), y = py(n);
-    if (n.id === 3) {
-      const pulse = (Math.sin(frame * 0.04) + 1) / 2;
-      ctx.beginPath(); ctx.arc(x, y, n.r + 7 * pulse, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(58,58,60,${0.12*(1-pulse)})`; ctx.lineWidth = 1.5; ctx.stroke();
-    }
-    if (n.id === 22) {
-      const pulse2 = (Math.sin(frame * 0.04 + 2) + 1) / 2;
-      ctx.beginPath(); ctx.arc(x, y, n.r + 7 * pulse2, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(0,122,255,${0.18*(1-pulse2)})`; ctx.lineWidth = 2; ctx.stroke();
-    }
-    ctx.beginPath(); ctx.arc(x, y, n.r, 0, Math.PI*2);
-    ctx.fillStyle = n.fill; ctx.fill();
-    ctx.fillStyle = n.tc;
-    const fs = Math.max(7, n.r * 0.44);
-    ctx.font = `500 ${fs}px Inter, sans-serif`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const lines = n.label.split('\n');
-    lines.forEach((l, i) => ctx.fillText(l, x, y + (i - (lines.length-1)/2) * fs * 1.3));
+  // Spawn
+  if(frame%3===0 && particles.length<70) { spawnFlow(); if(Math.random()<.5) spawnFlow(); }
+  if(frame%4===0 && audienceParticles.length<120) { spawnAudience(); if(Math.random()<.6) spawnAudience(); }
+
+  // Update & draw flow particles
+  particles.forEach(p=>{p.t+=p.speed});
+  particles=particles.filter(p=>p.t<1);
+  particles.forEach(p=>{
+    const na=NODES[p.a], nb=NODES[p.b];
+    const x=px(na)+(px(nb)-px(na))*p.t;
+    const y=py(na)+(py(nb)-py(na))*p.t;
+    const a=(p.hot?0.65:0.35)*(1-p.t*.5);
+    ctx.beginPath(); ctx.arc(x,y,p.hot?2.6:1.8,0,Math.PI*2);
+    ctx.fillStyle=`rgba(28,28,30,${a})`; ctx.fill();
   });
 
+  // Update & draw audience particles (exploding outward, blue)
+  audienceParticles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    p.life-=p.decay;
+    p.vx*=.98; p.vy*=.98;
+    if(p.life>0){
+      // glow
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3);
+      g.addColorStop(0,`rgba(0,122,255,${p.life*.5})`);
+      g.addColorStop(1,`rgba(0,122,255,0)`);
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,122,255,${p.life*.9})`; ctx.fill();
+    }
+  });
+  audienceParticles=audienceParticles.filter(p=>p.life>0);
+
+  // Nodes on top
+  NODES.forEach(drawNode);
   requestAnimationFrame(loop);
 }
 loop();
