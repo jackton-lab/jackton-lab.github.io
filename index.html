@@ -7,6 +7,776 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+    :root {
+      /* Dynamic Monochromatic Base */
+      --sys-bg:        #f2f2f7;
+      --sys-bg2:       #ffffff;
+      --sys-fill:      #e5e5ea;
+      --sys-fill2:     #d1d1d6;
+      --oled:          #000000;
+      --oled-near:     #0a0a0c;
+      --oled-surface:  #111114;
+
+      /* Labels */
+      --l1:  #000000;
+      --l2:  rgba(60,60,67,.6);
+      --l3:  rgba(60,60,67,.3);
+      --l4:  rgba(60,60,67,.18);
+
+      /* iOS System Blue — Ambient Sync */
+      --blue:          #007aff;
+      --blue-oled:     #0a84ff;
+      --blue-glow:     rgba(0,122,255,.22);
+      --blue-tint:     rgba(0,122,255,.08);
+
+      /* Translucent Frost */
+      --frost-light:   rgba(255,255,255,0.78);
+      --frost-mid:     rgba(255,255,255,0.55);
+      --frost-dark:    rgba(22,22,26,0.86);
+      --frost-darker:  rgba(12,12,14,0.92);
+
+      /* Refractive borders */
+      --refract-hi:    rgba(255,255,255,0.72);
+      --refract-lo:    rgba(255,255,255,0.08);
+      --sep:           rgba(60,60,67,.12);
+
+      /* Squircle radius — super-ellipsoid */
+      --sq-xl:  28px;
+      --sq-lg:  22px;
+      --sq-md:  16px;
+      --sq-sm:  12px;
+      --sq-pill:980px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, 'SF Pro Display', 'SF Pro Text', BlinkMacSystemFont, sans-serif;
+      background: var(--sys-bg);
+      color: var(--l1);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── SQUIRCLE util (SVG clip approach via border-radius override) ─── */
+    .sq { border-radius: var(--sq-lg); }
+    .sq-xl { border-radius: var(--sq-xl); }
+    .sq-sm { border-radius: var(--sq-sm); }
+
+    /* ─── REFRACTIVE GLASS material ─── */
+    .glass {
+      background: var(--frost-light);
+      backdrop-filter: saturate(200%) blur(40px) brightness(1.04);
+      -webkit-backdrop-filter: saturate(200%) blur(40px) brightness(1.04);
+      border: 1px solid var(--refract-hi);
+      box-shadow:
+        0 0 0 .5px var(--refract-lo) inset,
+        0 1px 0 var(--refract-hi) inset,
+        0 4px 32px rgba(0,0,0,.06),
+        0 1px 4px rgba(0,0,0,.04);
+    }
+    .glass-oled {
+      background: var(--frost-dark);
+      backdrop-filter: saturate(180%) blur(40px);
+      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.06) inset,
+        0 1px 0 rgba(255,255,255,.1) inset,
+        0 8px 40px rgba(0,0,0,.32),
+        0 2px 8px rgba(0,0,0,.2);
+    }
+    .glass-deeper {
+      background: var(--frost-darker);
+      backdrop-filter: saturate(160%) blur(60px);
+      -webkit-backdrop-filter: saturate(160%) blur(60px);
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.04) inset,
+        0 16px 64px rgba(0,0,0,.5),
+        0 4px 16px rgba(0,0,0,.28);
+    }
+
+    /* ─── NAV — Floating Island ─── */
+    .nav-island {
+      position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+      z-index: 500; width: min(calc(100% - 24px), 680px);
+    }
+    .nav-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 16px; height: 44px;
+      border-radius: var(--sq-pill);
+    }
+    .nl { font-size: .9rem; font-weight: 700; color: #fff; letter-spacing: -.015em; }
+    .nlinks { display: flex; gap: 1.4rem; list-style: none; }
+    .nlinks a { font-size: .72rem; font-weight: 400; color: rgba(255,255,255,.55); text-decoration: none; transition: color .18s; }
+    .nlinks a:hover { color: #fff; }
+    .ncta {
+      font-size: .7rem; font-weight: 600;
+      background: var(--blue-oled); color: #fff;
+      padding: .3rem .88rem; border-radius: var(--sq-pill);
+      text-decoration: none;
+      box-shadow: 0 2px 12px rgba(10,132,255,.45), 0 1px 0 rgba(255,255,255,.2) inset;
+      transition: opacity .18s;
+    }
+    .ncta:hover { opacity: .84; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 9rem 1.5rem 5.5rem;
+      position: relative; overflow: hidden;
+      background: var(--sys-bg2);
+    }
+    /* Ambient light simulation — moves with time via CSS animation */
+    .hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .ambient {
+      position: absolute; border-radius: 50%;
+      filter: blur(110px);
+      animation: ambientDrift 18s ease-in-out infinite alternate;
+    }
+    .am1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,122,255,.18) 0%, transparent 65%); top: -200px; left: -160px; animation-delay: 0s; }
+    .am2 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(94,92,230,.15) 0%, transparent 65%); bottom: -140px; right: -120px; animation-delay: -6s; }
+    .am3 { width: 340px; height: 340px; background: radial-gradient(circle, rgba(48,209,88,.1) 0%, transparent 65%); top: 38%; right: 8%; animation-delay: -12s; }
+    @keyframes ambientDrift {
+      0% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-20px) scale(1.08); }
+      66% { transform: translate(-20px,30px) scale(.95); }
+      100% { transform: translate(10px,10px) scale(1.04); }
+    }
+
+    /* Noise grain overlay */
+    .hero-noise {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      opacity: .028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px;
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: rgba(0,122,255,.08);
+      border: 1px solid rgba(0,122,255,.18);
+      border-radius: var(--sq-pill); padding: .3rem 1rem;
+      font-size: .67rem; font-weight: 500; color: var(--blue);
+      margin-bottom: 2rem;
+      opacity: 0; animation: up .6s .1s forwards;
+      box-shadow: 0 0 16px rgba(0,122,255,.08);
+    }
+    .badge-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 6px rgba(0,122,255,.7);
+      animation: dotPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes dotPulse { 0%,100%{opacity:1;box-shadow:0 0 6px rgba(0,122,255,.7)} 50%{opacity:.4;box-shadow:0 0 2px rgba(0,122,255,.2)} }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6.8vw, 5.6rem);
+      font-weight: 700; line-height: 1.055; letter-spacing: -.038em; color: var(--l1);
+      opacity: 0; animation: up .75s .22s forwards;
+    }
+    .hero h1 em {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-weight: 700;
+      background: linear-gradient(128deg, var(--blue) 0%, #5e5ce6 55%, #bf5af2 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 32px rgba(0,122,255,.18));
+    }
+    .hero-sub {
+      margin-top: 1.4rem;
+      font-size: clamp(.9rem, 1.8vw, 1.02rem);
+      font-weight: 300; color: var(--l2); max-width: 400px; line-height: 1.72;
+      opacity: 0; animation: up .75s .38s forwards;
+    }
+    .hero-ctas {
+      margin-top: 2.2rem; display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: up .75s .52s forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center;
+      font-size: .8rem; font-weight: 600;
+      text-decoration: none; padding: .68rem 1.6rem;
+      border-radius: var(--sq-pill);
+      transition: all .2s ease; letter-spacing: -.01em;
+    }
+    .btn:active { transform: scale(.96); }
+    .btn-primary {
+      background: var(--blue); color: #fff;
+      box-shadow: 0 4px 20px rgba(0,122,255,.42), 0 1px 0 rgba(255,255,255,.22) inset;
+    }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(0,122,255,.55); transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--frost-light); color: var(--l1);
+      border: 1px solid rgba(255,255,255,.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.65) inset, 0 2px 8px rgba(0,0,0,.06);
+    }
+    .btn-secondary:hover { background: var(--sys-fill); transform: translateY(-1px); }
+
+    .hero-scroll {
+      margin-top: 3.5rem; display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      opacity: 0; animation: up .7s .9s forwards;
+    }
+    .scroll-line { width: 1px; height: 30px; background: linear-gradient(to bottom, var(--l3), transparent); }
+    .scroll-txt { font-size: .57rem; letter-spacing: .14em; text-transform: uppercase; color: var(--l4); }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 5.5rem 1.5rem; }
+    .wrap { max-width: 960px; margin: 0 auto; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .62rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: .85rem;
+    }
+    .chip::before { content: ''; width: 12px; height: 1.5px; background: var(--blue); border-radius: 1px; }
+
+    h2 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.1; color: var(--l1); }
+    h2 em { font-family: 'Playfair Display', serif; font-style: italic; }
+    .body { margin-top: .7rem; font-size: .88rem; font-weight: 300; color: var(--l2); max-width: 400px; line-height: 1.74; }
+
+    /* ─── STATEMENT — OLED Black ─── */
+    .stmt {
+      background: var(--oled);
+      padding: 7rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    /* Refractive specular highlight on OLED */
+    .stmt::before {
+      content: '';
+      position: absolute; top: -1px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+    }
+    .stmt::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(0,122,255,.12) 0%, transparent 58%);
+      pointer-events: none;
+    }
+    .stmt p {
+      position: relative; z-index: 1;
+      font-size: clamp(1.15rem, 2.8vw, 1.9rem);
+      font-weight: 300; color: rgba(255,255,255,.35);
+      line-height: 1.58; letter-spacing: -.022em;
+      max-width: 620px; margin: 0 auto;
+    }
+    .stmt p strong { color: #fff; font-weight: 700; }
+
+    /* ─── NETWORK CARD ─── */
+    .net-card {
+      margin-top: 2.8rem;
+      border-radius: var(--sq-xl);
+      overflow: hidden;
+      background: var(--sys-bg2);
+      border: 1px solid var(--sep);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.85) inset,
+        0 2px 24px rgba(0,0,0,.06),
+        0 1px 4px rgba(0,0,0,.04);
+      padding: 2rem 1.5rem 1.5rem;
+    }
+    #nc { width: 100%; display: block; }
+    .net-leg {
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+      margin-top: 1.4rem; padding-top: 1.2rem;
+      border-top: 1px solid var(--l4); justify-content: center;
+    }
+    .leg { display: flex; align-items: center; gap: .35rem; font-size: .67rem; color: var(--l2); }
+    .ld { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── VALUE PROPS — Refractive Glass cards ─── */
+    .vp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.4rem; }
+    .vp {
+      background: var(--frost-light);
+      backdrop-filter: saturate(180%) blur(32px) brightness(1.02);
+      -webkit-backdrop-filter: saturate(180%) blur(32px) brightness(1.02);
+      border-radius: var(--sq-lg); padding: 1.6rem;
+      border: 1px solid var(--refract-hi);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.9) inset,
+        0 1px 0 rgba(255,255,255,.85) inset,
+        0 4px 24px rgba(0,0,0,.06),
+        0 1px 6px rgba(0,0,0,.04);
+      transition: box-shadow .26s, transform .26s;
+    }
+    .vp:hover {
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.9) inset,
+        0 1px 0 rgba(255,255,255,.85) inset,
+        0 12px 40px rgba(0,0,0,.1);
+      transform: translateY(-3px);
+    }
+    .vp-ico {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; margin-bottom: .95rem;
+      box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 2px 6px rgba(0,0,0,.08);
+    }
+    .vp-n { font-size: .58rem; font-weight: 600; color: var(--l3); letter-spacing: .1em; margin-bottom: .28rem; }
+    .vp h3 { font-size: .86rem; font-weight: 600; color: var(--l1); margin-bottom: .32rem; line-height: 1.3; }
+    .vp p { font-size: .76rem; color: var(--l2); line-height: 1.64; }
+
+    /* ─── COMPARE ─── */
+    .cmp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.4rem; }
+    .cmp {
+      border-radius: var(--sq-lg); padding: 1.45rem;
+      background: var(--frost-light);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--refract-hi);
+      box-shadow: 0 0 0 .5px rgba(255,255,255,.88) inset, 0 2px 12px rgba(0,0,0,.05);
+    }
+    .cmp.win {
+      background: var(--oled-near);
+      backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow:
+        0 0 0 .5px rgba(255,255,255,.06) inset,
+        0 1px 0 rgba(255,255,255,.1) inset,
+        0 16px 56px rgba(0,0,0,.36),
+        0 4px 16px rgba(0,0,0,.2);
+    }
+    .cmp-lbl { font-size: .6rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--l3); margin-bottom: .9rem; }
+    .cmp.win .cmp-lbl { color: rgba(255,255,255,.3); }
+    .cmp-badge { display: inline-block; background: var(--blue-oled); color: #fff; font-size: .58rem; font-weight: 700; padding: .15rem .45rem; border-radius: var(--sq-pill); margin-bottom: .28rem; box-shadow: 0 2px 8px rgba(10,132,255,.4); }
+    .cmp-name { font-size: .92rem; font-weight: 700; color: var(--l1); margin-bottom: .9rem; line-height: 1.2; }
+    .cmp.win .cmp-name { color: #fff; }
+    .crow { display: flex; align-items: center; justify-content: space-between; padding: .42rem 0; border-bottom: 1px solid var(--l4); font-size: .73rem; color: var(--l2); gap: .4rem; }
+    .cmp.win .crow { border-color: rgba(255,255,255,.07); color: rgba(255,255,255,.36); }
+    .crow:last-child { border-bottom: none; }
+    .ck { color: var(--blue-oled); font-weight: 700; }
+    .cv { font-weight: 500; color: var(--l2); white-space: nowrap; }
+    .cmp.win .cv { color: rgba(255,255,255,.8); }
+
+    /* ─── STATS — OLED ─── */
+    .stats-s {
+      background: var(--oled); padding: 5rem 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .stats-s::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(0,122,255,.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 25%, rgba(94,92,230,.08) 0%, transparent 48%);
+      pointer-events: none;
+    }
+    /* Specular top line */
+    .stats-s::after {
+      content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+    }
+    .stats-s .chip { color: rgba(255,255,255,.3); position: relative; z-index: 1; }
+    .stats-s .chip::before { background: rgba(255,255,255,.2); }
+    .stats-s h2 { color: #fff; position: relative; z-index: 1; }
+    .sg {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: rgba(255,255,255,.05);
+      border-radius: var(--sq-lg); overflow: hidden;
+      margin-top: 2.4rem; position: relative; z-index: 1;
+      border: 1px solid rgba(255,255,255,.05);
+      box-shadow: 0 0 0 .5px rgba(255,255,255,.04) inset;
+    }
+    .sc {
+      background: rgba(255,255,255,.02);
+      padding: 2.5rem 1.5rem; text-align: center;
+      transition: background .2s;
+    }
+    .sc:hover { background: rgba(255,255,255,.04); }
+    .sv {
+      font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
+      letter-spacing: -.04em; line-height: 1;
+      background: linear-gradient(160deg, #fff 0%, rgba(255,255,255,.62) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sl { font-size: .7rem; color: rgba(255,255,255,.28); margin-top: .48rem; line-height: 1.5; }
+
+    /* ─── CONTACT ─── */
+    .ct-s { text-align: center; padding: 7rem 1.5rem; background: var(--sys-bg2); position: relative; overflow: hidden; }
+    .ct-s::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(0,122,255,.05) 0%, transparent 55%); pointer-events: none; }
+    .ct-s h2, .ct-s .body { margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+    .ct-cards { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-top: 2.4rem; position: relative; z-index: 1; }
+    .cc {
+      background: var(--frost-light);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+      border-radius: var(--sq-lg); padding: 1.5rem 2rem;
+      text-decoration: none; color: var(--l1);
+      border: 1px solid var(--refract-hi);
+      box-shadow: 0 0 0 .5px rgba(255,255,255,.88) inset, 0 2px 12px rgba(0,0,0,.06);
+      transition: box-shadow .2s, transform .2s;
+      display: flex; flex-direction: column; align-items: center; gap: .3rem; min-width: 192px;
+    }
+    .cc:hover { box-shadow: 0 0 0 .5px rgba(255,255,255,.88) inset, 0 10px 32px rgba(0,0,0,.1); transform: translateY(-2px); }
+    .cc-ico { font-size: 1.2rem; }
+    .cc-lbl { font-size: .59rem; color: var(--l3); text-transform: uppercase; letter-spacing: .1em; }
+    .cc-v { font-size: .78rem; font-weight: 600; color: var(--l1); }
+
+    footer {
+      padding: 1.4rem 2rem; border-top: 1px solid var(--l4);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: .8rem; background: var(--sys-bg2);
+    }
+    .fl { font-size: .84rem; font-weight: 700; color: var(--l1); }
+    footer p { font-size: .64rem; color: var(--l3); }
+
+    /* REVEAL */
+    .rv { opacity: 0; transform: translateY(16px); transition: opacity .55s ease, transform .55s ease; }
+    .rv.on { opacity: 1; transform: none; }
+    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
+
+    @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+    @media(max-width:680px){
+      .nlinks{display:none}
+      .nav-island{top:10px;width:calc(100% - 18px)}
+      section{padding:4rem 1.1rem}
+      .stmt,.stats-s,.ct-s{padding:4.5rem 1.1rem}
+      .vp-grid,.cmp-grid{grid-template-columns:1fr}
+      .sg{grid-template-columns:1fr}
+      footer{flex-direction:column;text-align:center}
+      .ct-cards{flex-direction:column;align-items:stretch}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-island">
+  <div class="nav-inner glass-oled">
+    <div class="nl">Jackton</div>
+    <ul class="nlinks">
+      <li><a href="#sistem">Sistem</a></li>
+      <li><a href="#keunggulan">Keunggulan</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <a href="#kontak" class="ncta">Hubungi Kami</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="ambient am1"></div>
+    <div class="ambient am2"></div>
+    <div class="ambient am3"></div>
+  </div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Digital Marketing & Creative Agency — Properti</div>
+    <h1>Attention<br><em>Untuk brand properti</em></h1>
+    <p class="hero-sub">Jackton mendistribusikan nama brand properti anda untuk membangun atensi serta membangun viralitas yang terus tumbuh sendiri.</p>
+    <div class="hero-ctas">
+      <a href="#kontak" class="btn btn-primary">Mulai Bersama Jackton</a>
+      <a href="#sistem" class="btn btn-secondary">Lihat Sistem ↓</a>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-txt">Scroll</span></div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<div class="stmt">
+  <p>Brand properti yang <strong>tersebar di mana-mana</strong><br>tidak perlu mengejar calon pembeli —<br>calon pembeli yang <strong>datang sendiri.</strong></p>
+</div>
+
+<!-- NETWORK -->
+<section style="background:var(--sys-bg2)" id="sistem">
+  <div class="wrap">
+    <div class="chip rv">Ekosistem Distribusi</div>
+    <h2 class="rv">Dari satu sumber —<br><em>menyebar tanpa batas.</em></h2>
+    <p class="body rv">Jackton membangun jaringan distribusi konten yang bergerak agresif ke seluruh penjuru platform — setiap hari, tanpa henti.</p>
+    <div class="net-card rv">
+      <canvas id="nc"></canvas>
+      <div class="net-leg">
+        <div class="leg"><div class="ld" style="background:#1c1c1e"></div>Sumber</div>
+        <div class="leg"><div class="ld" style="background:#3a3a3c"></div>Bank Konten</div>
+        <div class="leg"><div class="ld" style="background:#636366"></div>Distributor</div>
+        <div class="leg"><div class="ld" style="background:#aeaeb2"></div>Platform</div>
+        <div class="leg"><div class="ld" style="background:#007aff"></div>Audiens Tersebar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section style="background:var(--sys-bg)">
+  <div class="wrap">
+    <div class="chip rv">Apa yang Kami Bangun</div>
+    <h2 class="rv">Ketenaran brand yang<br><em>compounding.</em></h2>
+    <div class="vp-grid">
+      <div class="vp rv">
+        <div class="vp-ico" style="background:rgba(0,122,255,.08)">📡</div>
+        <div class="vp-n">01</div>
+        <h3>Distribusi Masif</h3>
+        <p>Nama brand properti anda tersebar ke ribuan titik setiap hari — melampaui jangkauan viwes iklan biasa.</p>
+      </div>
+      <div class="vp rv d1">
+        <div class="vp-ico" style="background:rgba(94,92,230,.08)">🧲</div>
+        <div class="vp-n">02</div>
+        <h3>Brand Awareness yang Dalam</h3>
+        <p>Calon pembeli mengenal brand kamu jauh sebelum pertemuan pertama — datang warm, bukan cold.</p>
+      </div>
+      <div class="vp rv d2">
+        <div class="vp-ico" style="background:rgba(48,209,88,.08)">♾️</div>
+        <div class="vp-n">03</div>
+        <h3>Momentum yang Terus Tumbuh</h3>
+        <p>Semakin banyak konten tersebar, semakin dikenal brand kamu — efek compounding yang tidak bisa dibeli satu kali iklan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section style="background:var(--sys-bg2)" id="keunggulan">
+  <div class="wrap">
+    <div class="chip rv">Perbandingan</div>
+    <h2 class="rv">Kenapa Jackton<br>berbeda.</h2>
+    <div class="cmp-grid">
+      <div class="cmp rv">
+        <div class="cmp-lbl">Konvensional</div>
+        <div class="cmp-name">Billboard & Cetak</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv">Hilang</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv">Tidak ada</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv">✗</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv">Cold</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv">Sulit</span></div>
+      </div>
+      <div class="cmp rv d1">
+        <div class="cmp-lbl">Digital Ads</div>
+        <div class="cmp-name">Meta / Google</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv">Hilang</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv">Tidak ada</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv">✗</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv">Sebagian</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv">Sebagian</span></div>
+      </div>
+      <div class="cmp win rv d2">
+        <div class="cmp-lbl">Jackton</div>
+        <div class="cmp-badge">Rekomendasi</div>
+        <div class="cmp-name">Evergreen Network</div>
+        <div class="crow"><span>Setelah berhenti</span><span class="cv"><span class="ck">✓</span> Tetap aktif</span></div>
+        <div class="crow"><span>Aset tersisa</span><span class="cv"><span class="ck">✓</span> Ribuan konten</span></div>
+        <div class="crow"><span>Compounding</span><span class="cv"><span class="ck">✓</span> Tumbuh tiap bulan</span></div>
+        <div class="crow"><span>Leads masuk</span><span class="cv"><span class="ck">✓</span> Warm</span></div>
+        <div class="crow"><span>Terukur</span><span class="cv"><span class="ck">✓</span> Harian</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-s">
+  <div class="wrap">
+    <div class="chip rv">Output</div>
+    <h2 class="rv" style="color:#fff">Angka yang berbicara.</h2>
+    <div class="sg">
+      <div class="sc rv"><div class="sv">390+</div><div class="sl">Konten aktif per bulan</div></div>
+      <div class="sc rv d1"><div class="sv">5jt+</div><div class="sl">Estimasi views organik / bulan</div></div>
+      <div class="sc rv d2"><div class="sv">∞</div><div class="sl">Aktif selama platform hidup</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="ct-s" id="kontak">
+  <div class="wrap">
+    <div class="chip rv">Mulai Sekarang</div>
+    <h2 class="rv">Siap membuat brand anda<br><em>tersebar di mana-mana?</em></h2>
+    <p class="body rv">Ceritakan proyek anda. Jackton bantu rancang sistem distribusi yang tepat.</p>
+    <div class="ct-cards">
+      <a href="https://wa.me/6285725143083" class="cc rv" target="_blank">
+        <span class="cc-ico">💬</span><span class="cc-lbl">WhatsApp</span><span class="cc-v">+62 857-2514-3083</span>
+      </a>
+      <a href="mailto:bettercalljack.portal@gmail.com" class="cc rv d1">
+        <span class="cc-ico">✉️</span><span class="cc-lbl">Email</span><span class="cc-v">bettercalljack.portal@gmail.com</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">Jackton</div>
+  <p>Digital Marketing & Creative Agency — Spesialis Properti</p>
+  <p>© 2026 Jackton</p>
+</footer>
+
+<script>
+// REVEAL
+document.querySelectorAll('.rv').forEach(el =>
+  new IntersectionObserver(([e])=>e.isIntersecting&&e.target.classList.add('on'),{threshold:.07}).observe(el)
+);
+
+// ── NETWORK DIAGRAM: OUTWARD EXPLOSION ──
+const canvas = document.getElementById('nc');
+const ctx = canvas.getContext('2d');
+function resize(){ const w=canvas.parentElement.clientWidth-32; canvas.width=w; canvas.height=Math.round(Math.min(460,w*.5)); }
+resize(); window.addEventListener('resize',resize);
+const W=()=>canvas.width, H=()=>canvas.height;
+
+// Squircle draw helper
+function squircle(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+const NODES = [
+  {id:0,rx:.38,ry:.10,r:14,type:'src', fill:'#1c1c1e'},
+  {id:1,rx:.50,ry:.07,r:14,type:'src', fill:'#1c1c1e'},
+  {id:2,rx:.62,ry:.10,r:14,type:'src', fill:'#1c1c1e'},
+  {id:3,rx:.50,ry:.30,r:22,type:'bank',fill:'#2c2c2e'},
+  {id:4, rx:.22,ry:.28,r:11,type:'dist',fill:'#48484a'},
+  {id:5, rx:.30,ry:.50,r:11,type:'dist',fill:'#48484a'},
+  {id:6, rx:.42,ry:.57,r:11,type:'dist',fill:'#48484a'},
+  {id:7, rx:.58,ry:.57,r:11,type:'dist',fill:'#48484a'},
+  {id:8, rx:.70,ry:.50,r:11,type:'dist',fill:'#48484a'},
+  {id:9, rx:.78,ry:.28,r:11,type:'dist',fill:'#48484a'},
+  {id:10,rx:.36,ry:.20,r:11,type:'dist',fill:'#48484a'},
+  {id:11,rx:.64,ry:.20,r:11,type:'dist',fill:'#48484a'},
+  // platforms scattered outward — squircle style drawn as circles
+  {id:12,rx:.04, ry:.16,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:13,rx:.08, ry:.40,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:14,rx:.06, ry:.64,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:15,rx:.16, ry:.82,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:16,rx:.32, ry:.90,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:17,rx:.50, ry:.93,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:18,rx:.68, ry:.90,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:19,rx:.84, ry:.82,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:20,rx:.94, ry:.64,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:21,rx:.92, ry:.40,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:22,rx:.96, ry:.16,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:23,rx:.74, ry:.06,r:8,type:'plat',fill:'#aeaeb2'},
+  {id:24,rx:.26, ry:.06,r:8,type:'plat',fill:'#aeaeb2'},
+];
+
+const EDGES=[
+  [0,3],[1,3],[2,3],
+  [3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],
+  [4,12],[4,13],[10,12],[10,24],[24,23],
+  [5,13],[5,14],[5,15],
+  [6,15],[6,16],[6,17],
+  [7,17],[7,18],[7,19],
+  [8,19],[8,20],[8,21],
+  [9,21],[9,22],[11,22],[11,23],
+];
+
+let particles=[], audParts=[], frame=0;
+const px=n=>n.rx*W(), py=n=>n.ry*H();
+
+function drawNode(n){
+  const x=px(n),y=py(n),r=n.r;
+  if(n.type==='bank'){
+    const p=(Math.sin(frame*.042)+1)/2;
+    ctx.beginPath(); ctx.arc(x,y,r+9*p,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(72,72,74,${.14*(1-p)})`; ctx.lineWidth=1.5; ctx.stroke();
+    // Refractive glass ring
+    ctx.beginPath(); ctx.arc(x,y,r+2,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,0.14)'; ctx.lineWidth=1; ctx.stroke();
+  }
+  // Node fill with glass sheen
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=n.fill; ctx.fill();
+  // Top specular highlight
+  ctx.beginPath(); ctx.arc(x,y-.5,r*.7,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.07)'; ctx.fill();
+  // Symbol
+  ctx.fillStyle=n.type==='plat'?'rgba(255,255,255,.55)':'rgba(255,255,255,.88)';
+  const fs=Math.max(6.5,r*.5);
+  ctx.font=`600 ${fs}px -apple-system,sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  const sym={src:'▶',bank:'⊙',dist:'◈',plat:'▲'}[n.type];
+  ctx.fillText(sym,x,y+.5);
+}
+
+function spawnFlow(){
+  const e=EDGES[Math.floor(Math.random()*EDGES.length)];
+  const na=NODES[e[0]];
+  const hot=na.type==='bank'||na.type==='dist';
+  particles.push({a:e[0],b:e[1],t:0,speed:.011+Math.random()*.013,hot});
+}
+
+function spawnAud(){
+  // Shoot from platform nodes outward
+  const plats=NODES.filter(n=>n.type==='plat');
+  const n=plats[Math.floor(Math.random()*plats.length)];
+  const cx=W()*.5, cy=H()*.42;
+  const dx=px(n)-cx, dy=py(n)-cy;
+  const len=Math.sqrt(dx*dx+dy*dy)||1;
+  const spd=.9+Math.random()*1.4;
+  audParts.push({
+    x:px(n),y:py(n),
+    vx:(dx/len)*spd*(1.2+Math.random()*.8),
+    vy:(dy/len)*spd*(1.2+Math.random()*.8),
+    life:1,decay:.013+Math.random()*.011,
+    r:1.4+Math.random()*1.8,
+    hue:Math.random()<.7?'0,122,255':'94,92,230',
+  });
+}
+
+function loop(){
+  frame++;
+  ctx.clearRect(0,0,W(),H());
+
+  // Edges
+  EDGES.forEach(([a,b])=>{
+    const na=NODES[a],nb=NODES[b];
+    const isMain=na.type==='src'||na.type==='bank';
+    ctx.beginPath(); ctx.moveTo(px(na),py(na)); ctx.lineTo(px(nb),py(nb));
+    ctx.strokeStyle=isMain?'rgba(0,0,0,.08)':'rgba(0,0,0,.038)';
+    ctx.lineWidth=isMain?1.1:.7; ctx.stroke();
+  });
+
+  // Spawn
+  if(frame%3===0&&particles.length<80){spawnFlow();if(Math.random()<.55)spawnFlow();}
+  if(frame%4===0&&audParts.length<140){spawnAud();if(Math.random()<.65)spawnAud();}
+
+  // Flow particles
+  particles.forEach(p=>{p.t+=p.speed});
+  particles=particles.filter(p=>p.t<1);
+  particles.forEach(p=>{
+    const na=NODES[p.a],nb=NODES[p.b];
+    const x=px(na)+(px(nb)-px(na))*p.t;
+    const y=py(na)+(py(nb)-py(na))*p.t;
+    const a=(p.hot?.6:.32)*(1-p.t*.45);
+    ctx.beginPath(); ctx.arc(x,y,p.hot?2.5:1.7,0,Math.PI*2);
+    ctx.fillStyle=`rgba(28,28,30,${a})`; ctx.fill();
+  });
+
+  // Audience explosion particles — glow outward
+  audParts.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.life-=p.decay; p.vx*=.975; p.vy*=.975;
+    if(p.life>0){
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);
+      g.addColorStop(0,`rgba(${p.hue},${p.life*.42})`);
+      g.addColorStop(1,`rgba(${p.hue},0)`);
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${p.hue},${p.life*.88})`; ctx.fill();
+    }
+  });
+  audParts=audParts.filter(p=>p.life>0);
+
+  NODES.forEach(drawNode);
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jackton — Sebar. Dominasi. Compounding.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{
       --sys-bg:       #f2f2f7;
       --sys-bg2:      #ffffff;
