@@ -319,8 +319,8 @@
       <a href="https://wa.me/6285725143083" class="cc glass rv" target="_blank" rel="noopener">
         <span class="ccico">💬</span><span class="cclbl">WhatsApp</span><span class="ccv">+62 857-2514-3083</span>
       </a>
-      <a href="/cdn-cgi/l/email-protection#c7a5a2b3b3a2b5a4a6ababada6a4ace9b7a8b5b3a6ab87a0aaa6aeabe9a4a8aa" class="cc glass rv d1">
-        <span class="ccico">✉️</span><span class="cclbl">Email</span><span class="ccv"><span class="__cf_email__" data-cfemail="0260677676677061636e6e686361692c726d7076636e42656f636b6e2c616d6f">[email&#160;protected]</span></span>
+      <a href="#" class="cc glass rv d1" id="email-cta">
+        <span class="ccico">✉️</span><span class="cclbl">Email</span><span class="ccv">bettercalljack.portal&#64;gmail.com</span>
       </a>
     </div>
   </div>
@@ -333,6 +333,10 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Build email link dynamically (bypass Cloudflare obfuscation)
+const em = document.getElementById('email-cta');
+if (em) { const u='bettercalljack.portal',d='gmail.com'; em.href='mailto:'+u+'@'+d; }
+
 // Reveal
 document.querySelectorAll('.rv').forEach(el =>
   new IntersectionObserver(([e]) => e.isIntersecting && e.target.classList.add('on'), {threshold:.07}).observe(el)
