@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jackton — Digital Marketing & Creative Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #0a0a0a;
+      --offwhite: #f4f1ec;
+      --cream: #e8e2d9;
+      --gold: #c9a84c;
+      --gold-light: #e2c47a;
+      --muted: #7a7060;
+      --dark2: #141210;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--offwhite);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 4rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--cream); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; opacity: 0.75;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 8rem 4rem 4rem;
+      position: relative; overflow: hidden;
+      background: radial-gradient(ellipse at 70% 40%, rgba(201,168,76,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 50%),
+                  var(--black);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 0.4rem 1rem; border-radius: 2px;
+      margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 900; line-height: 1.05;
+      max-width: 800px;
+      opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--gold);
+    }
+    .hero-sub {
+      margin-top: 2rem;
+      font-size: 1.05rem; font-weight: 300; color: var(--muted);
+      max-width: 480px; line-height: 1.7;
+      opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .hero-cta {
+      margin-top: 3rem; display: flex; gap: 1.2rem; align-items: center;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--gold); color: var(--black);
+      padding: 0.9rem 2.2rem; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-ghost {
+      color: var(--cream); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; opacity: 0.6;
+      transition: opacity 0.2s;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-ghost:hover { opacity: 1; }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0.4;
+      animation: fadeUp 1s 1.2s forwards, pulse 2s 2s infinite;
+    }
+    .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; }
+    .scroll-line { width: 1px; height: 40px; background: var(--gold); }
+
+    /* MASALAH */
+    .section { padding: 7rem 4rem; }
+    .section-label {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; line-height: 1.2;
+      max-width: 600px; margin-bottom: 3rem;
+    }
+
+    .problems-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.1);
+      margin-top: 3rem;
+    }
+    .problem-card {
+      background: var(--dark2);
+      padding: 2.5rem;
+      transition: background 0.3s;
+    }
+    .problem-card:hover { background: #1a1710; }
+    .problem-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 900; color: rgba(201,168,76,0.2);
+      margin-bottom: 1rem;
+    }
+    .problem-card h3 {
+      font-size: 1rem; font-weight: 500; margin-bottom: 0.75rem; color: var(--offwhite);
+    }
+    .problem-card p { font-size: 0.88rem; line-height: 1.7; color: var(--muted); }
+
+    /* SOLUSI */
+    .solution { background: var(--dark2); }
+    .pillars {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;
+    }
+    .pillar {
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 2.5rem 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .pillar::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .pillar:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); }
+    .pillar:hover::before { opacity: 1; }
+    .pillar-icon {
+      font-size: 1.5rem; margin-bottom: 1.2rem;
+    }
+    .pillar-num {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .pillar h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.5rem;
+    }
+    .pillar-platform {
+      font-size: 0.8rem; color: var(--gold); margin-bottom: 1rem; opacity: 0.8;
+    }
+    .pillar ul { list-style: none; }
+    .pillar ul li {
+      font-size: 0.83rem; color: var(--muted); line-height: 1.8;
+      padding-left: 1rem; position: relative;
+    }
+    .pillar ul li::before {
+      content: '—'; position: absolute; left: 0; color: var(--gold); opacity: 0.5;
+    }
+
+    /* KEUNGGULAN */
+    .compare-table {
+      width: 100%; border-collapse: collapse; margin-top: 3rem;
+      font-size: 0.88rem;
+    }
+    .compare-table th {
+      padding: 1rem 1.5rem; text-align: left;
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .compare-table th.highlight { color: var(--gold); }
+    .compare-table td {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--muted);
+    }
+    .compare-table td:first-child { color: var(--offwhite); font-weight: 500; }
+    .compare-table td.highlight {
+      color: var(--offwhite); background: rgba(201,168,76,0.06);
+    }
+    .check { color: var(--gold); font-weight: 700; }
+
+    /* MEKANISME */
+    .mechanism { background: var(--dark2); }
+    .steps {
+      display: flex; gap: 0; margin-top: 3rem; position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute; top: 2rem; left: 2rem; right: 2rem; height: 1px;
+      background: linear-gradient(90deg, var(--gold), rgba(201,168,76,0.1));
+    }
+    .step {
+      flex: 1; padding: 0 1.5rem; position: relative;
+    }
+    .step-dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--gold); margin-bottom: 2rem;
+      position: relative; z-index: 1;
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.15);
+    }
+    .step-num {
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .step h4 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .step p { font-size: 0.78rem; line-height: 1.6; color: var(--muted); }
+
+    /* INVESTASI */
+    .invest-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start;
+    }
+    .cost-items { display: flex; flex-direction: column; gap: 1rem; }
+    .cost-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid rgba(201,168,76,0.1);
+      background: rgba(201,168,76,0.03);
+    }
+    .cost-item-left h4 { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.2rem; }
+    .cost-item-left p { font-size: 0.75rem; color: var(--muted); }
+    .cost-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--gold); white-space: nowrap;
+    }
+    .cost-total {
+      padding: 1.5rem; background: var(--gold); color: var(--black);
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 0.5rem;
+    }
+    .cost-total h4 { font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .cost-total .amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 900;
+    }
+    .output-card {
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 2.5rem; height: 100%;
+    }
+    .output-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; margin-bottom: 2rem;
+    }
+    .output-stat {
+      margin-bottom: 1.5rem;
+    }
+    .output-stat .val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 900; color: var(--gold);
+      line-height: 1;
+    }
+    .output-stat .label {
+      font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem;
+    }
+
+    /* KONTAK */
+    .contact { text-align: center; padding: 8rem 4rem; background: var(--dark2); }
+    .contact .section-title { margin: 0 auto 1.5rem; }
+    .contact-sub {
+      color: var(--muted); font-size: 1rem; max-width: 500px;
+      margin: 0 auto 3rem; line-height: 1.7;
+    }
+    .contact-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--gold); font-weight: 900;
+    }
+    footer p { font-size: 0.75rem; color: var(--muted); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .section { padding: 5rem 1.5rem; }
+      .problems-grid { grid-template-columns: 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; }
+      .steps::before { display: none; }
+      .invest-grid { grid-template-columns: 1fr; }
+      .contact { padding: 5rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">JACKTON</div>
+    <ul class="nav-links">
+      <li><a href="#masalah">Konteks</a></li>
+      <li><a href="#solusi">Solusi</a></li>
+      <li><a href="#mekanisme">Mekanisme</a></li>
+      <li><a href="#investasi">Investasi</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-tag">Digital Marketing & Creative Agency — Properti</span>
+    <h1>Konten yang<br><em>Terus Bekerja</em><br>Setelah Kamu Tidur.</h1>
+    <p class="hero-sub">
+      Jackton membangun ekosistem pemasaran digital yang compounding — bukan iklan yang mati saat budget habis.
+    </p>
+    <div class="hero-cta">
+      <a href="#kontak" class="btn-primary">Mulai Diskusi</a>
+      <a href="#solusi" class="btn-ghost">Lihat Sistem ↓</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- MASALAH -->
+  <section class="section" id="masalah">
+    <div class="section-label">01 — Konteks</div>
+    <h2 class="section-title reveal">Empat kondisi yang membatasi pertumbuhan marketing properti saat ini.</h2>
+    <div class="problems-grid">
+      <div class="problem-card reveal">
+        <div class="problem-num">01</div>
+        <h3>Konten berhenti bekerja saat budget habis</h3>
+        <p>Setiap kali campaign berakhir, tidak ada aset yang tersisa. Semua distribusi mati — dan harus dimulai dari nol lagi.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">02</div>
+        <h3>Calon buyer datang tanpa konteks produk</h3>
+        <p>Leads yang masuk sering cold — sales harus mengedukasi dari awal setiap kali, memperpanjang siklus closing.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">03</div>
+        <h3>Kapasitas distribusi bergantung satu tim</h3>
+        <p>Volume konten terbatas oleh kapasitas internal. Tidak ada sistem yang bisa scale tanpa menambah biaya proporsional.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">04</div>
+        <h3>Tidak ada sistem yang tumbuh sendiri</h3>
+        <p>Model iklan konvensional: semakin lama berjalan, biaya tetap sama. Tidak ada compounding effect dari investasi konten.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUSI -->
+  <section class="section solution" id="solusi">
+    <div class="section-label">02 — Solusi</div>
+    <h2 class="section-title reveal">Sistem Jack — Tiga pilar ekosistem marketing terintegrasi.</h2>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <div class="pillar-num">Pilar 01</div>
+        <h3>Prestige Channel</h3>
+        <div class="pillar-platform">Instagram</div>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">Brand &amp; Trust</p>
+        <ul>
+          <li>Branding premium &amp; aspirasional</li>
+          <li>Review, edukasi, UGC organik</li>
+          <li>Lifestyle content berkualitas tinggi</li>
+          <li>Konsisten tone of voice</li>
+        </ul>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar-num">Pilar 02</div>
+        <h3>Viral Engine</h3>
+        <div class="pillar-platform">TikTok + Reels</div>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">Distribusi &amp; Volume</p>
+        <ul>
+          <li>10–30 kreator re-produksi konten</li>
+          <li>3 akun niche berbeda identitas</li>
+          <li>15 konten/hari — aman shadow ban</li>
+          <li>Aset digital yang terus hidup</li>
+        </ul>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar-num">Pilar 03</div>
+        <h3>Community Clipper</h3>
+        <div class="pillar-platform">Discord</div>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">Scale &amp; Amplifikasi</p>
+        <ul>
+          <li>Komisi murni by views — terukur</li>
+          <li>Pintu masuk utama untuk leads</li>
+          <li>Clipper fokus produksi &amp; distribusi</li>
+          <li>Budget = plafon, bayar performa</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEUNGGULAN -->
+  <section class="section" id="keunggulan">
+    <div class="section-label">03 — Keunggulan</div>
+    <h2 class="section-title reveal">Bukan soal siapa yang lebih murah — tapi soal aset yang compounding.</h2>
+    <table class="compare-table reveal">
+      <thead>
+        <tr>
+          <th>Aspek</th>
+          <th>Billboard</th>
+          <th>Meta / Google Ads</th>
+          <th class="highlight">Sistem Jack ✦</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Budget bulanan</td>
+          <td>Rp 15–25 jt</td>
+          <td>Rp 15–25 jt</td>
+          <td class="highlight"><span class="check">✓</span> Rp 18 jt</td>
+        </tr>
+        <tr>
+          <td>Setelah berhenti</td>
+          <td>Hilang</td>
+          <td>Hilang</td>
+          <td class="highlight"><span class="check">✓</span> Konten tetap aktif</td>
+        </tr>
+        <tr>
+          <td>Terukur?</td>
+          <td>Tidak</td>
+          <td>Sebagian</td>
+          <td class="highlight"><span class="check">✓</span> Views harian</td>
+        </tr>
+        <tr>
+          <td>Aset tersisa</td>
+          <td>Nol</td>
+          <td>Nol</td>
+          <td class="highlight"><span class="check">✓</span> Ribuan konten aktif</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- MEKANISME -->
+  <section class="section mechanism" id="mekanisme">
+    <div class="section-label">04 — Mekanisme</div>
+    <h2 class="section-title reveal">Dari konten mentah — ke awareness — ke leads yang datang sendiri.</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-dot"></div>
+        <div class="step-num">01</div>
+        <h4>Produksi Raw Content</h4>
+        <p>Shoot konten mentah: tur unit, drone, rooftop, lifestyle. Upload ke Google Drive sebagai bank konten bersama.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot"></div>
+        <div class="step-num">02</div>
+        <h4>Volume Engine</h4>
+        <p>1 clipper internal kelola 3 akun TikTok. 5 konten/akun/hari = 15 konten total dalam batas aman platform.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot"></div>
+        <div class="step-num">03</div>
+        <h4>Viral Engine</h4>
+        <p>10–30 kreator re-edit konten dari Drive. Komisi murni by views — fokus distribusi &amp; performa.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot"></div>
+        <div class="step-num">04</div>
+        <h4>Brand Discovery</h4>
+        <p>Calon buyer yang lihat 5–10 konten mencari kontak mandiri lewat Instagram atau website resmi.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-dot"></div>
+        <div class="step-num">05</div>
+        <h4>Laporan &amp; Iterasi</h4>
+        <p>Laporan mingguan: total konten, views, pertumbuhan channel, leads masuk. Evaluasi berkala bersama klien.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTASI -->
+  <section class="section" id="investasi">
+    <div class="section-label">05 — Investasi</div>
+    <h2 class="section-title reveal">Transparan, berbasis performa, dan meninggalkan aset.</h2>
+    <div class="invest-grid">
+      <div class="reveal">
+        <div class="cost-items">
+          <div class="cost-item">
+            <div class="cost-item-left">
+              <h4>Clipper Gaji — Volume Engine</h4>
+              <p>3 akun TikTok, 15 konten/hari</p>
+            </div>
+            <div class="cost-amount">Rp 4 jt</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-left">
+              <h4>Distribusi Clipper Discord</h4>
+              <p>Plafon maks Rp 10 jt — dibayar sesuai views</p>
+            </div>
+            <div class="cost-amount">Rp 10 jt</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-left">
+              <h4>Produksi Raw Content</h4>
+              <p>Shooting, drone, talent, editing mentah</p>
+            </div>
+            <div class="cost-amount">Rp 3 jt</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-left">
+              <h4>Tools &amp; Operasional</h4>
+              <p>Paid software, koordinasi dll</p>
+            </div>
+            <div class="cost-amount">Rp 1 jt</div>
+          </div>
+          <div class="cost-total">
+            <h4>Total Maksimal / Bulan</h4>
+            <div class="amount">Rp 18 jt</div>
+          </div>
+        </div>
+      </div>
+      <div class="output-card reveal">
+        <h3>Output yang Diharapkan</h3>
+        <div class="output-stat">
+          <div class="val">390–1.000+</div>
+          <div class="label">Konten per bulan tayang aktif di platform</div>
+        </div>
+        <div class="output-stat">
+          <div class="val">500rb–5jt+</div>
+          <div class="label">Estimasi views/bulan organik, tanpa ads tambahan</div>
+        </div>
+        <div class="output-stat">
+          <div class="val">∞</div>
+          <div class="label">Konten tetap aktif selama platform hidup</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAK -->
+  <section class="contact" id="kontak">
+    <div class="section-label" style="text-align:center;">Langkah Selanjutnya</div>
+    <h2 class="section-title reveal">Siap membangun sistem yang bekerja sendiri?</h2>
+    <p class="contact-sub reveal">
+      Satu langkah berikutnya: sepakati scope, tentukan timeline, dan kick-off sistem pemasaran yang compounding untuk properti kamu.
+    </p>
+    <div class="contact-cta reveal">
+      <a href="https://wa.me/62" class="btn-primary">Hubungi via WhatsApp</a>
+      <a href="mailto:hello@jackton.id" class="btn-ghost">hello@jackton.id →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">JACKTON</div>
+    <p>Digital Marketing &amp; Creative Agency — Spesialis Properti</p>
+    <p>© 2026 Jackton. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+
+</body>
+</html>
